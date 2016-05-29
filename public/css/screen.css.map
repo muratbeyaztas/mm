@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACA,sDAC4B,CACxB,OAAO,CAAE,UAAU,CACnB,KAAK,CAAE,EAAE",
+"sources": ["../../sass/_main.scss"],
+"names": [],
+"file": "screen.css"
+}
