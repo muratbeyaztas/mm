@@ -3,11 +3,16 @@
 	"use strict";
 
 	var options = {
-		events_source: 'events.json.php',
+		//events_source: 'events.json.php',
+		events_source: 'lib/bootstrap-calendar/events.json.php',
 		view: 'month',
-		tmpl_path: 'tmpls/',
+		//tmpl_path: 'tmpls/',
+		tmpl_path: 'lib/bootstrap-calendar/tmpls/',
 		tmpl_cache: false,
 		day: '2013-03-12',
+		modal: "#events-modal",
+		modal_type : "ajax",
+		modal_title : function (e) { return e.title },
 		onAfterEventsLoad: function(events) {
 			if(!events) {
 				return;

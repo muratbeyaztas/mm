@@ -18,8 +18,8 @@
 	<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<link href="css/styles.css" rel="stylesheet">
-		<link href="css/screen.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
+	<link href="css/screen.css" rel="stylesheet">
 </head>
 
 <body>
@@ -121,14 +121,14 @@
 							<div class="col-sm-10">
 								<select class="form-control">
 									<option>Seçiniz</option>
-								  <option>Eren A</option>
-								  <option>Eren B</option>
+									<option>Eren A</option>
+									<option>Eren B</option>
 								</select>
 							</div>
 						</div>
-						<div class="form-group date" >
+						<div class="form-group date">
 							<label for="inputEmail3" class="col-sm-2 control-label">Tarih</label>
-							<div class="col-sm-10" >
+							<div class="col-sm-10">
 								<input class="form-control" data-provide="datepicker">
 							</div>
 						</div>
@@ -154,7 +154,8 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Ödeme</label>
 							<div class="col-sm-10">
-								<input class="form-control" style="width:90%; display:inline-block; margin-right:3px;"><label>TL</lebel>
+								<input class="form-control" style="width:90%; display:inline-block; margin-right:3px;">
+								<label>TL</lebel>
 							</div>
 						</div>
 						<div class="form-group">
@@ -188,8 +189,7 @@
 				<div role="tabpanel" class="tab-pane" id="profile">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus sapiente repudiandae quis aperiam deleniti omnis laborum quam fugit ipsam ea adipisci nihil autem tempora, explicabo in? Aspernatur error, laborum ipsa!</div>
 				<div role="tabpanel" class="tab-pane" id="messages">
 
-
-					<div id="calendar"></div>
+					hjkklkl
 
 
 
@@ -198,7 +198,43 @@
 
 		</div>
 
+		<div class="page-header">
 
+			<div class="pull-right form-inline">
+				<div class="btn-group">
+					<button class="btn btn-primary" data-calendar-nav="prev">
+						<< Prev</button>
+							<button class="btn" data-calendar-nav="today">Today</button>
+							<button class="btn btn-primary" data-calendar-nav="next">Next >></button>
+				</div>
+				<div class="btn-group">
+					<button class="btn btn-warning" data-calendar-view="year">Year</button>
+					<button class="btn btn-warning active" data-calendar-view="month">Month</button>
+					<button class="btn btn-warning" data-calendar-view="week">Week</button>
+					<button class="btn btn-warning" data-calendar-view="day">Day</button>
+				</div>
+			</div>
+
+			<h3></h3>
+			<small>To see example with events navigate to march 2013</small>
+		</div>
+		<div id="calendar"></div>
+
+		<div class="modal fade" id="events-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 class="modal-title">Event</h3>
+					</div>
+					<div class="modal-body" style="height: 400px">
+					</div>
+					<div class="modal-footer">
+						<a href="#" data-dismiss="modal" class="btn">Close</a>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 
@@ -241,6 +277,8 @@
 			</div>
 		</div>
 	</footer>
+
+
 	<!-- script references -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -248,30 +286,28 @@
 	<script src="js/bootstrap-datepicker.tr.min.js" charset="UTF-8"></script> -->
 
 
-	<script src="lib/jquery/dist/jquery.js" ></script>
-	<script src="lib/bootstrap/dist/js/bootstrap.js" ></script>
-	<script src="lib/underscore/underscore.js" ></script>
-	<script src="lib/moment/moment.js" ></script>
+	<script src="lib/jquery/dist/jquery.js"></script>
+	<script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="lib/underscore/underscore.js"></script>
+	<script src="lib/moment/moment.js"></script>
 
-	<script src="lib/bootstrap-calendar/js/calendar.js" ></script>
+	<script src="lib/bootstrap-calendar/js/calendar.js"></script>
+	<script src="lib/bootstrap-calendar/js/app.js"></script>
 
 	<script type="text/javascript">
-			var calendar = $("#calendar").calendar(
-					{
-							tmpl_path: "lib/bootstrap-calendar/tmpls/",
-							events_source: function () {
-								return [
-									{
-						           "id": 893,
-						           "title": "Event 1",
-						           "url": "http://example.com",
-						           "class": "event-important",
-						           "start": 12039485678000, // Milliseconds
-						           "end": 1234576967000 // Milliseconds
-						       }
-								];
-							}
-					});
+		var calendar = $("#calendar").calendar({
+			tmpl_path: "lib/bootstrap-calendar/tmpls/",
+			//events_source: 'lib/bootstrap-calendar/events.json.php'
+			events_source: function() {
+				return [];
+			}
+			modal: "#events-modal",
+
+			//modal : "#events-modal",
+			//modal_type : "ajax",
+			//modal_title : function (e) { return e.title }
+		});
+
 	</script>
 
 
