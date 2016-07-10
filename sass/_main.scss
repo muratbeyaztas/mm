@@ -1,6 +1,41 @@
+body {
+  color: #646464;
+  background-color: #efefef;
+}
 
+.nav {
+  border: 1px solid #337ab7;
+  border-radius: 4px;
+}
 .nav-tabs.nav-justified>li,
 .nav-pills.nav-justified>li {
     display: table-cell;
     width: 1%;
+}
+
+.nav-justified>li>a {
+  margin-bottom: 0;
+}
+
+.nav-pills>li>a {
+  //border-radius: 4px 0 0 4px;
+  border-radius: 0;
+}
+
+#calendarYatch {
+  .btn {
+    padding: 6px 9px;
+  }
+}
+
+#register {
+  > form {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-header > div {
+    margin-bottom: 20px;
+  }
 }

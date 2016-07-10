@@ -877,7 +877,7 @@ if(!String.prototype.formatNum) {
 		}
 		return;
 	};
-	
+
 	Calendar.prototype.getYear = function() {
 		var p = this.options.position.start;
 		return p.getFullYear();
@@ -1275,4 +1275,8 @@ if(!String.prototype.formatNum) {
 	$.fn.calendar = function(params) {
 		return new Calendar(params, this);
 	}
+
+
+
+	
 }(jQuery));
