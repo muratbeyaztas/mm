@@ -1,5 +1,8 @@
 
-var express = require('express');
+var express = require('express'),
+	mongoClient = require('mongodb').MongoClient,
+	storeData = require('./storeManager');
+
 
 var router = express.Router();
 
@@ -7,7 +10,23 @@ var router = express.Router();
 
 router.get('/',function(req,res){
 
-	res.render('./boat/index', { title: 'Murat, World!' } );	
+	console.log('geldi lan valla geldi');	
+	mongoClient.connect(storeData.mongoConString,function(err,db){
+
+		if(!err){
+
+			var boatCollection = db.collection("Boats");
+			boatCollection.find().toArray(function(err, boats){
+
+				res.render('./boat/index',{model: boats});
+			});
+			db.close();
+		}
+		else{
+			res.send("mongodb ye bağlanamadı");
+		}
+	});
+	// res.render('./boat/index', { title: 'Murat, World!' } );	
 });
 
 

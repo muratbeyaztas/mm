@@ -6,12 +6,16 @@ var express = require('express'),
 	favicon = require('serve-favicon');
 
 var eventManager = require('./managers/EventManager'),
-	boatManagr = require('./managers/boatManager');
+	boatManagr = require('./managers/boatManager'),
+	storeData = require('./managers/storeManager');
 
 var app = express(),
 	port = 5000,
 	mongoClient = mongodb.MongoClient,
 	mongoConString = 'mongodb://localhost:27017/mustafa';
+
+
+storeData.mongoConString = mongoConString;
 
 
 // view engine setup
