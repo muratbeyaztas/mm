@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-var express = require('express');
-var app = express();
-var port = 5000;
-
-app.use(express.static('public'));
-app.use(express.static('src/views'));
-
-app.get('/', function(req, res){
-  res.send('Hello World');
-});
-
-app.get('/books', function(req, res){
-  res.send('Hello Books');
-});
-
-app.listen(port, function(err){
-  console.log('running server on port ' + port);
-=======
 var express = require('express'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
@@ -52,7 +33,9 @@ app.use('/etkinlikler',eventManager);
 app.use('/tekneler',boatManagr);
 
 
-app.listen(port, function(err){
+app.listen(port, function(error){
+	if(error){
+		console.log(error);
+	}
 	console.log('running server on port ' + port);
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
 });
