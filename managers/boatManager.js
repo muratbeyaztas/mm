@@ -10,7 +10,6 @@ var router = express.Router();
 
 router.get('/',function(req,res){
 
-	console.log('geldi lan valla geldi');	
 	mongoClient.connect(storeData.mongoConString,function(err,db){
 
 		if(!err){

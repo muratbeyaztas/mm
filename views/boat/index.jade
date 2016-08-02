@@ -19,9 +19,9 @@ html
 					.panel.panel-primary
 						.panel-heading Yeni tekne giriniz
 						.panel-body
-							.row
+							.row.blockElement
 								.col-md-11
-									input(type='text', placeholder='Tekne adını giriniz').form-control
+									input(type='text', placeholder='Tekne adını giriniz').form-control.boatName
 								.col-md-1
 									button.btn.btn-success.addBoat Ekle
 			.row
@@ -43,3 +43,13 @@ html
 											td #{boat.name}
 											td
 												button.btn.btn-danger.deleteBoat Sil
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js")
+		script(src="js/bootstrap.min.js")
+		//- script(src="lib/jquery/dist/jquery.js")
+		//- script(src="lib/bootstrap/dist/js/bootstrap.js")
+		script(src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js")
+		script(src="./scripts/toastrJs.js")
+		script(src="./scripts/boatJs.js")
+		script.
+			boatJs.init();
+			toastrJs.init();
