@@ -19,16 +19,26 @@ html
 					.panel.panel-primary
 						.panel-heading Yeni tekne giriniz
 						.panel-body
+<<<<<<< HEAD
 							.row.blockElement
 								.col-md-11
 									input(type='text', placeholder='Tekne adını giriniz').form-control.boatName
 								.col-md-1
 									button.btn.btn-success.addBoat Ekle
+=======
+							form(method="POST",action="/tekneler/ekle")
+								.row
+									.col-md-11
+										input(type='text', placeholder='Tekne adını giriniz',name="bname").form-control
+									.col-md-1
+										button(type="submit").btn.btn-success.addBoat Ekle
+>>>>>>> 2093d35b892d484474466c56e6fcd3b3bb4240a1
 			.row
 				.col-md-12
 					.panel.panel-info
 						.panel-heading Sistemde kayıtlı teknelerin listesi
 						.panel-body
+							.small(style="color:red") #{model.error}
 							table(style='background-color:white;').table.table-bordered.table-hover
 								thead
 									tr
@@ -36,7 +46,7 @@ html
 										th Tekne Adı
 										th Sil
 								tbody
-									each boat in model
+									each boat in model.boats
 										tr(data-id='#{boat.id}')
 										
 											td #{boat.id}

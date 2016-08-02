@@ -33,6 +33,9 @@ app.use('/etkinlikler',eventManager);
 app.use('/tekneler',boatManagr);
 
 
-app.listen(port, function(err){
+app.listen(port, function(error){
+	if(error){
+		console.log(error);
+	}
 	console.log('running server on port ' + port);
 });
