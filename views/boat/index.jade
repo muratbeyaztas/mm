@@ -1,0 +1,45 @@
+
+doctype
+html
+	head
+		title #{title}
+		meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+		meta(charset="utf-8")
+		meta(name="generator", content="Bootply")
+		meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+		link(rel='stylesheet', href='/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/css/bootstrap-datepicker3.standalone.min.css')
+		link(rel='stylesheet', href='/lib/bootstrap-calendar/css/calendar.css')
+		link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css')
+		link(rel="stylesheet", href="css/screen.css")
+	body
+		.container(style='margin:20px')
+			.row
+				.col-md-12
+					.panel.panel-primary
+						.panel-heading Yeni tekne giriniz
+						.panel-body
+							.row
+								.col-md-11
+									input(type='text', placeholder='Tekne adını giriniz').form-control
+								.col-md-1
+									button.btn.btn-success.addBoat Ekle
+			.row
+				.col-md-12
+					.panel.panel-info
+						.panel-heading Sistemde kayıtlı teknelerin listesi
+						.panel-body
+							table(style='background-color:white;').table.table-bordered.table-hover
+								thead
+									tr
+										th Id
+										th Tekne Adı
+										th Sil
+								tbody
+									each boat in model
+										tr(data-id='#{boat.id}')
+										
+											td #{boat.id}
+											td #{boat.name}
+											td
+												button.btn.btn-danger.deleteBoat Sil
