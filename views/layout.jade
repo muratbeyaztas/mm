@@ -16,7 +16,7 @@ html
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css')
 
     link(rel="stylesheet", href="css/screen.css")
-  
+    link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
   body
     //- header
     //-   h1 My Site
@@ -141,13 +141,16 @@ html
     script(src="lib/jquery/dist/jquery.js")
     script(src="lib/bootstrap/dist/js/bootstrap.js")
     script(src="lib/underscore/underscore.js")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js")
     script(src="lib/moment/moment.js")
     script(src="lib/bootstrap-calendar/js/calendar.js")
     script(src="lib/bootstrap-calendar/js/app.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js")
     script(src="lib/bootstrap-calendar/js/calendar.js")
     script(src="lib/bootstrap-calendar/js/calendar.js")
+    script(src="./scripts/toastrJs.js")
     script(type="text/javascript").
+         var toastrJs.init();
          var calendar = $("#calendar").calendar({
           tmpl_path: "lib/bootstrap-calendar/tmpls/",
           //events_source: 'lib/bootstrap-calendar/events.json.php'

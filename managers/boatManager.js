@@ -21,8 +21,11 @@ var boatModel = {
 
 router.get('/',function(req,res){
 
+<<<<<<< HEAD
+=======
 	// getBoats(getBoatsSuccess,getBoatSError);
 
+>>>>>>> 2093d35b892d484474466c56e6fcd3b3bb4240a1
 	mongoClient.connect(storeData.mongoConString,function(err,db){
 
 		if(!err){
