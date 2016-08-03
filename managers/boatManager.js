@@ -1,6 +1,8 @@
 var express = require('express'),
 mongoClient = require('mongodb').MongoClient,
-storeData = require('./storeManager');
+storeData = require('./storeManager'),
+_ = require("underscore"),
+objectId = require('mongodb').ObjectID;
 
 
 var router = express.Router();
@@ -26,10 +28,13 @@ router.get('/',function(req,res){
 		if(!err){
 
 			var boatCollection = db.collection(boatCollectionName);
-			boatCollection.find().toArray(function(err, boats){
+			boatCollection.find().sort({ "createdDate": -1 }).toArray(function(err, boats){
 
-				viewmodel.boats = boats;
+				// viewmodel.boats = _.chain(boats).sortBy(function(boat){
+				// 	return -boat.createdDate;
+				// }).value();
 				viewmodel.error = "",
+				viewmodel.boats = boats;
 				res.render(indexpage, { model: viewmodel });
 			});
 			db.close();
@@ -44,16 +49,29 @@ router.get('/',function(req,res){
 });
 
 
-router.post('/sil/:bootId',function(req,res){
-
+router.get('/sil/:boatId',function(req,res){
+	
+	var boatId = req.params.boatId;
+	mongoClient.connect(storeData.mongoConString, function(err,db) {
+		
+		if(err){
+			viewmodel.error = "database bağlantısında sorun var";
+		}
+		else{
+			var boatColletion = db.collection(boatCollectionName);
+			boatColletion.deleteOne({ "_id": new objectId(boatId) }, function(err,result) {
+				viewmodel.error = "kayıt başarıyla silindi. DeletedCount: " + result.deletedCount;
+				res.redirect("./tekneler/");
+			});
+		}
+	});
 });
 
 router.post('/ekle',function(req,res){
 
-	mongoClient.connect(function(err,db){
+	mongoClient.connect(storeData.mongoConString,function(err,db){
 
 		var boatname = req.body.bname;
-		viewmodel.error = "test";
 		if(err){
 			viewmodel.error = "database bağlanılamadı";
 		}
@@ -79,13 +97,14 @@ router.post('/ekle',function(req,res){
 				}
 			});
 
-			boatCollection.find().toArray(function(err,result){
-				viewmodel.boats = result;
-			});
+			res.redirect("./");
 
+			// boatCollection.find().toArray(function(err,result){
+			// 	viewmodel.boats = result;
+			// 	res.render(indexpage,{ model:viewmodel });
+			// });
 		}
 		db.close();
-		res.render(indexpage,{ model:viewmodel });
 	});
 });
 

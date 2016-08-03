@@ -30,7 +30,7 @@ html
 					.panel.panel-info
 						.panel-heading Sistemde kayıtlı teknelerin listesi
 						.panel-body
-							.small(style="color:red") #{model.error}
+							small(style="color:red") #{model.error}
 							table(style='background-color:white;').table.table-bordered.table-hover
 								thead
 									tr
@@ -41,7 +41,7 @@ html
 									each boat in model.boats
 										tr(data-id='#{boat.id}')
 										
-											td #{boat.id}
+											td #{boat._id}
 											td #{boat.name}
 											td
-												button.btn.btn-danger.deleteBoat Sil
+												a.btn.btn-danger.deleteBoat(href="sil/#{boat._id}") Sil
