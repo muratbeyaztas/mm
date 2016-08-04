@@ -58,72 +58,80 @@ html
               h3
             #calendar
           div(role="tabpanel").tab-pane#register
-            form(method="post", action="saveEvent", role="form", data-toggle="validator").form-horizontal
+            form(method="post", action="kaydet", role="form", data-toggle="validator").form-horizontal
               .form-group
                 label.col-sm-2.control-label Tekne
                 .col-sm-10
                   select(name="bootType", required data-error="Tekne seçmediniz!").form-control
                     option(value="") Seçiniz
-                    option(value="1") Eren A
+                    option(value="1",selected="selected") Eren A
                     option(value="2") Eren B
                   div.help-block.with-errors
               .form-group
                 label.col-sm-2.control-label Başlık
                 .col-sm-10
-                  input(name="eventSubject", required data-error="Etkinliğe ait bir başlık girmediniz!").form-control.title-event
+                  input(name="eventSubject", required data-error="Etkinliğe ait bir başlık girmediniz!", value="Düğün Töreni").form-control.title-event
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Tarih
                 .col-sm-10
-                  input(data-provide="datepicker", name="startDate", required, type="date", data-error="Etkinliğin başlangiç tarihini giriniz!").form-control
+                  input(data-provide="datepicker", name="startDate", required, type="date", data-error="Etkinliğin başlangiç tarihini giriniz!", value="2016-08-04").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Saat
                 .col-sm-10
-                  input(placeholder="00:00", name="startTime", required, type="number", data-error="Etkinliğin başlangıç saatini giriniz!").form-control
+                  input(placeholder="00:00", name="startTime", required, type="number", data-error="Etkinliğin başlangıç saatini giriniz!", value="10").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Kişi Sayısı
                 .col-sm-10
-                  input(name="guestCount", required, type="number", data-error="Etkinliği katılacak kişi sayısını giriniz!").form-control
+                  input(name="guestCount", required, type="number", data-error="Etkinliği katılacak kişi sayısını giriniz!", value="150").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Başlangıç - Bitiş Yeri
                 .col-sm-10
-                  input(style="margin-bottom:3px", name="startLocation", required, data-error="Başlangıç yerini giriniz!").form-control
-                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!").form-control
+                  input(style="margin-bottom:3px", name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control 
+                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="KADIKÖY").form-control 
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Ödeme
                 .col-sm-10
-                  input(style="width:90%; display:inline-block; margin-right:3px;", name="payment", required, type="number", data-error="Ödeme miktarını giriniz!").form-control
+                  input(style="width:90%; display:inline-block; margin-right:3px;", name="payment", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
                   label TL
                   div.help-block.with-errors
               .form-group
                   label.col-sm-2.ontrol-label Açıklama
                   div.col-sm-10
-                    textarea(rows="5", name="eventDescription", required, data-error="Etkinlik açıklamasını giriniz!").form-control
+                    textarea(rows="5", name="eventDescription", required, data-error="Etkinlik açıklamasını giriniz!").form-control Yemekli düğün töreni
                     div.help-block.with-errors
               .form-group
                 div.col-sm-offset-2.col-sm-10
                   .checkbox
                     label
-                      input(type="checkbox", name="hasMeal")
+                      input(type="checkbox", name="hasMeal",checked="checked")
                       |Yemekli
                       div.help-block.with-errors
               .form-group
                 div.col-sm-offset-2.col-sm-10
                   input(type="submit", value="Tamam", name="saveEvent").btn.btn-success.pull-right.event-send
 
-      div.modal.fade#events-modal
-        .modal-dialog
-          .modal-content
-            .modal-header
-              button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
-              h3.modal-title Event
-            div(style="height: 400px").modal-body
-            .modal-footer
-              a(href="#" data-dismiss="modal").btn Close
+      //- div.modal.fade#events-modal
+      //-   .modal-dialog
+      //-     .modal-content
+      //-       .modal-header
+      //-         button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
+      //-         h3.modal-title Event
+      //-       div(style="height: 400px").modal-body
+      //-       .modal-footer
+      //-         a(href="#" data-dismiss="modal").btn Close
+
+      #events-modal.modal.hide.fade
+        .modal-header
+          button(type="button", data-dismiss="modal", aria-hidden="true").close &times;
+          h3 Event
+        .modal-body(style="height: 400px")
+        .modal-footer
+          a(href="#", data-dismiss="modal").btn Close
 
       //- Container Bitiyor
 
@@ -148,53 +156,13 @@ html
     script(src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js")
     script(src="lib/bootstrap-calendar/js/calendar.js")
     script(src="lib/bootstrap-calendar/js/calendar.js")
-    script(src="./scripts/toastrJs.js")
+    script(src="scripts/toastrJs.js")
     script(type="text/javascript").
-         var toastrJs.init();
-         var calendar = $("#calendar").calendar({
+        //-  var toastrJs.init();
+        var calendar = $('#calendar').calendar({
           tmpl_path: "lib/bootstrap-calendar/tmpls/",
-          //events_source: 'lib/bootstrap-calendar/events.json.php'
-          events_source: function() {
-            return [];
-          }
-          modal: "#events-modal",
-         
-         });
-         
-         
-         // var calendar = $('#calendar').calendar({
-         //   tmpl_path: "lib/bootstrap-calendar/tmpls/",
-         //   day: '2013-03-12',
-         //   events_source: function(){
-         //     return  [
-         //        {
-         //            "id": 298,
-         //            "title": "Event 1",
-         //            "url": "http://example.com",
-         //            "class": "event-important",
-         //            "start": 1362938400000, // Milliseconds
-         //            "end": 1363197686300 // Milliseconds
-         //        }
-         //    ];
-         // }});
-         
-         
-         
-         
-         var calendar = $('#calendar').calendar({
-         
-          tmpl_path: "lib/bootstrap-calendar/tmpls/",
-          day: '2013-03-12',
-          events_source: function(){
-            return  [
-            {
-              "id": 298,
-              "title": title-val,
-              "url": "http://example.com",
-              "class": "event-important",
-                     "start": 1362938400000, // Milliseconds
-                     "end": 1363197686300 // Milliseconds
-                    }
-                    ];
-                  }});
-         
+          day: "#{ model.dateTime }",
+          language: 'tr-TR',
+          modal:"#events-modal",
+          events_source: #{ model.events.results}
+        });

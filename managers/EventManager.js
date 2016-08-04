@@ -1,20 +1,51 @@
 
-var express = require('express');
-var router = express.Router();
-var mongoClient = require('mongodb').MongoClient;
-// var url = 'mongodb://localhost:27017/mustafa';
+var express = require('express'),
+	router = express.Router(),
+	mongoClient = require('mongodb').MongoClient,
+	dateFormat = require('dateformat'),
+	storeManager = require('./storeManager');
+
+var eventCollectionName = "Events";
+var layoutPageName = "./layout";
+
+var viewModel = {
+	error: '',
+	dateTime: dateFormat(Date.now(), "yyyy-mm-dd"),
+	events: {
+		success: 1,
+		results: []
+	}
+};
 
 
-router.get('/', function(req, res){
+router.get('/', function (req, res) {
 
+	mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
-	res.redirect('index.html');
+		if (err) {
+			viewModel.error = "database bağlanılamadı";
+		}
+		else {
+			var eventCollection = db.collection(eventCollectionName);
+			var cursor = eventCollection.find().sort({ "startDate": -1 });
+
+			cursor.each(function (err, event) {
+				viewModel.events.results.push(convertToClientEventModel(event));
+			});
+		}
+
+		if (db) {
+			db.close();
+		}
+		res.render(layoutPageName, { model: viewModel });
+	});
+
+	// res.redirect('index.html');
 });
 
+router.post('/kaydet', function (req, res) {
 
-router.post('/kaydet',function(req,res){
-
-	var event = {
+	var eventModel = {
 		bootType: req.body.bootType,
 		subject: req.body.eventSubject,
 		startDate: req.body.startDate,
@@ -27,27 +58,51 @@ router.post('/kaydet',function(req,res){
 		hasMeail: req.body.hasMeal
 	};
 
-	mongoClient.connect(mongoConString,function(err,db){
+	mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
-		if(!err){
+		if (!err) {
 
-			var eventCollection = db.collection("Events");
-			eventCollection.insert(event, function(err,result){
+			var eventCollection = db.collection(eventCollectionName);
+			eventCollection.insert(eventModel, function (err, result) {
 
-				if(err){
+				if (err) {
 					res.send("event kaydedilemedi");
-				}else{
+				} else {
 					res.send("event başarıyla kaydedild");
 				}
 			});
 
 			db.close();
 		}
-		else{
+		else {
 			res.send("mongodb ye bağlanamadı");
 		}
 	});
 
 });
+
+function convertToClientEventModel(event) {
+
+	var clientEventModel = {
+		id: '',
+		title: '',
+		url: '',
+		class: '',
+		start: '',
+		end: ''
+	};
+	if (event) {
+		var clientEventModel = {
+			id: event._id.toString(),
+			title: event.subject,
+			url: '',
+			class: 'event-important',
+			start: new Date(event.startDate).getTime(), // Milliseconds
+			end: new Date().setDate(new Date(event.startDate).getTime() + 1) // Milliseconds
+		};
+	}
+	return clientEventModel;
+};
+
 
 module.exports = router;
