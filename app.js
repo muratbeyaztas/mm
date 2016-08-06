@@ -29,8 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/etkinlikler',eventManager);
-app.use('/tekneler',boatManagr);
+app.use('/etkinlikler/',eventManager);
+app.use('/tekne/',boatManagr);
 
 
 app.listen(port, function(error){
