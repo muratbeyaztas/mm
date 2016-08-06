@@ -25,4 +25,4 @@ var toastrJs = (function(){
 	return {
 		init: init
 	}
-}();
+})();

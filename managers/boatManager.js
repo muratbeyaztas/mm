@@ -23,13 +23,9 @@ router.get(['/', '/liste'], function (req, res) {
 
 	mongoClient.connect(storeData.mongoConString, function (err, db) {
 		if (!err) {
-
 			var boatCollection = db.collection(boatCollectionName);
 			boatCollection.find().sort({ "createdDate": -1 }).toArray(function (err, boats) {
 
-				// viewmodel.boats = _.chain(boats).sortBy(function(boat){
-				// 	return -boat.createdDate;
-				// }).value();
 				viewmodel.error = "";
 				viewmodel.boats = boats;
 				res.render(indexpage, { model: viewmodel });

@@ -24,14 +24,12 @@ app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+//app.use(favicon(__dirname + '/public/favicon.ico')); // uncomment after placing your favicon in /public
 app.use(express.static(path.join(__dirname, 'public')));
+app.locals.pretty = true; //block html minifier. In prod remove comment this.
 
-
-app.use('/etkinlikler/',eventManager);
-app.use('/tekne/',boatManagr);
-
+app.use(['/', '/etkinlik'],eventManager);
+app.use('/tekneler',boatManagr);
 
 app.listen(port, function(error){
 	if(error){
