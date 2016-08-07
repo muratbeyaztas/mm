@@ -25,17 +25,21 @@ router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail)
 
-function getEventDetail(req, res){
+function getEventDetail(req, res) {
 
 	var eventid = req.params.id;
-	mongoClient.connect(storeManager.mongoConString, function(err, db){
+	mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
-		db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function(err, doc){
-			if(db) {
-				db.close();
-			}
+		db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function (err, doc) {
 
-			res.render(eventDetailPageName, { model: doc });
+			db.collection(boatColletionName).findOne({ _id: new ObjectId(doc.bootType) }, function (err, docBoat) {
+
+				doc.bootType = docBoat.name;
+				if (db) {
+					db.close();
+				}
+				res.render(eventDetailPageName, { model: doc });
+			});
 		});
 	});
 }
@@ -104,17 +108,17 @@ function convertToClientEventModel(event) {
 function getEvents(req, res) {
 
 	var viewmodel = new eventViewModel();
-	mongoClient.connect(storeManager.mongoConString, function(err, db){
+	mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
 		var boats = db.collection(boatColletionName);
-		boats.find().toArray(function(err, results){
-			
-			if(db){
+		boats.find().toArray(function (err, results) {
+
+			if (db) {
 				db.close();
 			}
 
 			viewmodel.boats = results;
-			res.render(layoutPageName, {model : viewmodel});
+			res.render(layoutPageName, { model: viewmodel });
 		});
 	});
 }
@@ -135,22 +139,11 @@ function saveEvent(req, res) {
 	};
 
 	mongoClient.connect(storeManager.mongoConString, function (err, db) {
-		if (!err) {
-			var eventCollection = db.collection(eventCollectionName);
-			eventCollection.insert(eventModel, function (err, result) {
-
-				if (err) {
-					res.send("event kaydedilemedi");
-				} else {
-					res.send("event başarıyla kaydedild");
-				}
-			});
-
+		var eventCollection = db.collection(eventCollectionName);
+		eventCollection.insert(eventModel, function (err, result) {
 			db.close();
-		}
-		else {
-			res.send("mongodb ye bağlanamadı");
-		}
+			res.redirect("/");
+		});
 	});
 }
 
