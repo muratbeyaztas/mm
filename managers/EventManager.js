@@ -2,48 +2,124 @@
 var express = require('express'),
 	router = express.Router(),
 	mongoClient = require('mongodb').MongoClient,
+	ObjectId = require('mongodb').ObjectID,
 	dateFormat = require('dateformat'),
 	storeManager = require('./storeManager');
 
-var eventCollectionName = "Events";
-var layoutPageName = "./layout";
+var eventCollectionName = "Events",
+	layoutPageName = "./layout",
+	boatColletionName = "Boats",
+	eventDetailPageName = "./event/eventDetail";
 
-var viewModel = {
-	error: '',
-	dateTime: dateFormat(Date.now(), "yyyy-mm-dd"),
-	events: {
-		success: 1,
-		results: []
-	}
-};
+function getEventsViewModel(success, result) {
+	this.success = success || '1';
+	this.result = result || [];
+}
 
+function eventViewModel(boats) {
+	this.boats = boats || [];
+}
 
-router.get('/', function (req, res) {
+router.get('/', getEvents);
+router.post('/kaydet', saveEvent);
+router.get('/eventler', getEventsByRange);
+router.get('/detay/:id', getEventDetail)
+
+function getEventDetail(req, res){
+
+	var eventid = req.params.id;
+	mongoClient.connect(storeManager.mongoConString, function(err, db){
+
+		db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function(err, doc){
+			if(db) {
+				db.close();
+			}
+
+			res.render(eventDetailPageName, { model: doc });
+		});
+	});
+}
+
+function getEventsByRange(req, res) {
+
+	var calenderEvents = new getEventsViewModel();
+	var from = req.query.from,
+		to = req.query.to;
+
+	from = dateFormat(new Date(parseInt(from)), "yyyy-mm-ddTHH:MM:ss");
+	to = dateFormat(new Date(parseInt(to)), "yyyy-mm-ddTHH:MM:ss");
 
 	mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
-		if (err) {
-			viewModel.error = "database bağlanılamadı";
-		}
-		else {
+		calenderEvents.success = 0;
+		if (!err) {
 			var eventCollection = db.collection(eventCollectionName);
-			var cursor = eventCollection.find().sort({ "startDate": -1 });
+			var evnts = eventCollection.find({ startDate: { $gt: from, $lt: to } }).sort({ startDate: -1 });
 
-			cursor.each(function (err, event) {
-				viewModel.events.results.push(convertToClientEventModel(event));
+			evnts.each(function (err, evnt) {
+
+				if (!evnt) {
+					calenderEvents.success = 1;
+					res.send(calenderEvents);
+				}
+				else {
+					calenderEvents.result.push({
+						id: evnt._id.toString(),
+						title: evnt.description,
+						url: '/detay/' + evnt._id,
+						class: "event-important",
+						start: new Date(evnt.startDate).getTime(),
+						end: new Date(evnt.startDate).setDate(new Date(evnt.startDate).getDate() + 1)
+					});
+				}
 			});
+		} else {
+			res.send("db bağlantısında sorun var");
 		}
-
-		if (db) {
-			db.close();
-		}
-		res.render(layoutPageName, { model: viewModel });
 	});
+}
 
-	// res.redirect('index.html');
-});
+function convertToClientEventModel(event) {
+	var clientEventModel = {
+		id: '',
+		title: '',
+		url: '',
+		class: '',
+		start: '',
+		end: ''
+	};
+	if (event) {
+		var clientEventModel = {
+			id: event._id.toString(),
+			title: event.subject,
+			url: '#events-modal',
+			class: 'event-important',
+			start: new Date(event.startDate).getTime(), // Milliseconds
+			end: new Date().setDate(new Date(event.startDate).getTime() + 1) // Milliseconds
+		};
+	}
+	return clientEventModel;
+}
 
-router.post('/kaydet', function (req, res) {
+function getEvents(req, res) {
+
+	var viewmodel = new eventViewModel();
+	mongoClient.connect(storeManager.mongoConString, function(err, db){
+
+		var boats = db.collection(boatColletionName);
+		boats.find().toArray(function(err, results){
+			
+			if(db){
+				db.close();
+			}
+
+			viewmodel.boats = results;
+			res.render(layoutPageName, {model : viewmodel});
+		});
+	});
+}
+
+function saveEvent(req, res) {
 
 	var eventModel = {
 		bootType: req.body.bootType,
@@ -59,9 +135,7 @@ router.post('/kaydet', function (req, res) {
 	};
 
 	mongoClient.connect(storeManager.mongoConString, function (err, db) {
-
 		if (!err) {
-
 			var eventCollection = db.collection(eventCollectionName);
 			eventCollection.insert(eventModel, function (err, result) {
 
@@ -78,31 +152,6 @@ router.post('/kaydet', function (req, res) {
 			res.send("mongodb ye bağlanamadı");
 		}
 	});
-
-});
-
-function convertToClientEventModel(event) {
-
-	var clientEventModel = {
-		id: '',
-		title: '',
-		url: '',
-		class: '',
-		start: '',
-		end: ''
-	};
-	if (event) {
-		var clientEventModel = {
-			id: event._id.toString(),
-			title: event.subject,
-			url: '',
-			class: 'event-important',
-			start: new Date(event.startDate).getTime(), // Milliseconds
-			end: new Date().setDate(new Date(event.startDate).getTime() + 1) // Milliseconds
-		};
-	}
-	return clientEventModel;
-};
-
+}
 
 module.exports = router;
