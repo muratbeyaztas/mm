@@ -4,7 +4,9 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	path = require('path'),
 	mongodb = require('mongodb'),
-	favicon = require('serve-favicon');
+	favicon = require('serve-favicon'),
+	appsettings = require("./appsettings.json");
+
 
 var eventManager = require('./managers/EventManager'),
 	boatManagr = require('./managers/boatManager'),
@@ -12,11 +14,9 @@ var eventManager = require('./managers/EventManager'),
 
 var app = express(),
 	port = 5000,
-	mongoClient = mongodb.MongoClient,
-	mongoConString = 'mongodb://localhost:27017/mustafa';
+	mongoClient = mongodb.MongoClient;
 
-
-storeData.mongoConString = mongoConString;
+storeData.mongoConString = appsettings.connectionStrings.mongoDev;
 
 
 // view engine setup
