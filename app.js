@@ -1,3 +1,4 @@
+// 'use strict';
 var express = require('express'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
@@ -27,9 +28,18 @@ app.use(cookieParser());
 //app.use(favicon(__dirname + '/public/favicon.ico')); // uncomment after placing your favicon in /public
 app.use(express.static(path.join(__dirname, 'public')));
 app.locals.pretty = true; //block html minifier. In prod remove comment this.
-app.use(['/', '/etkinlik'],eventManager);
-app.use('/tekneler',boatManagr);
 
+app.use(function(req, res, next) {
+    if (req.path.substr(-1) == '/' && req.path.length > 1) {
+        var query = req.url.slice(req.path.length);
+        res.redirect(301, req.path.slice(0, -1) + query);
+    } else {
+        next();
+    }
+});
+
+app.use(['/', '/etkinlik'],eventManager);
+app.use('/tekne',boatManagr);
 
 app.listen(port, function(error){
 	if(error){

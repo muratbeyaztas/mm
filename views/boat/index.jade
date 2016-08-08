@@ -11,7 +11,7 @@ html
 		link(rel='stylesheet', href='/css/bootstrap-datepicker3.standalone.min.css')
 		link(rel='stylesheet', href='/lib/bootstrap-calendar/css/calendar.css')
 		link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css')
-		link(rel="stylesheet", href="css/screen.css")
+		link(rel="stylesheet", href="/css/screen.css")
 	body
 		.container(style='margin:20px')
 			.row
@@ -19,7 +19,7 @@ html
 					.panel.panel-primary
 						.panel-heading Yeni tekne giriniz
 						.panel-body
-							form(method="POST",action="/tekneler/ekle")
+							form(method="POST",action="/tekne/ekle") 
 								.row.blockElement
 									.col-md-11
 										input(type='text', placeholder='Tekne adını giriniz',name="bname").form-control.boatName
@@ -30,7 +30,8 @@ html
 					.panel.panel-info
 						.panel-heading Sistemde kayıtlı teknelerin listesi
 						.panel-body
-							small(style="color:red") #{model.error}
+							.h2
+								small(style="color:red") #{model.error}
 							table(style='background-color:white;').table.table-bordered.table-hover
 								thead
 									tr
@@ -44,14 +45,14 @@ html
 											td #{boat._id}
 											td #{boat.name}
 											td
-												a.btn.btn-danger.deleteBoat(href="sil/#{boat._id}") Sil
+												a.btn.btn-danger.deleteBoat(href="/tekne/sil/#{boat._id}") Sil
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js")
-		script(src="js/bootstrap.min.js")
+		script(src="/js/bootstrap.min.js")
 		//- script(src="lib/jquery/dist/jquery.js")
 		//- script(src="lib/bootstrap/dist/js/bootstrap.js")
 		script(src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js")
-		script(src="./scripts/toastrJs.js")
-		script(src="./scripts/boatJs.js")
+		script(src="/scripts/toastrJs.js")
+		script(src="/scripts/boatJs.js")
 		script.
-			boatJs.init();
-			toastrJs.init();
+			//- boatJs.init();
+			//- toastrJs.init();
