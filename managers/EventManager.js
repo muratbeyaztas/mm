@@ -6,9 +6,9 @@ var express = require('express'),
 	dateFormat = require('dateformat'),
 	storeManager = require('./storeManager');
 
-var eventCollectionName = "Events",
+var eventCollectionName = "events",
 	layoutPageName = "./layout",
-	boatColletionName = "Boats",
+	boatColletionName = "boats",
 	eventDetailPageName = "./event/eventDetail";
 
 function getEventsViewModel(success, result) {
@@ -20,10 +20,10 @@ function eventViewModel(boats) {
 	this.boats = boats || [];
 }
 
-router.get('/', getEvents);
-router.post('/kaydet', saveEvent);
-router.get('/eventler', getEventsByRange);
-router.get('/detay/:id', getEventDetail)
+router.use('/', getEvents);
+router.use('/kaydet', saveEvent);
+router.use('/eventler', getEventsByRange);
+router.use('/detay/:id', getEventDetail)
 
 function getEventDetail(req, res) {
 
