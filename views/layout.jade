@@ -64,8 +64,8 @@ html
                 .col-sm-10
                   select(name="bootType", required data-error="Tekne seçmediniz!").form-control
                     option(value="") Seçiniz
-                    option(value="1",selected="selected") Eren A
-                    option(value="2") Eren B
+                    each boat in model.boats
+                      option(value="#{ boat._id }") #{ boat.name }
                   div.help-block.with-errors
               .form-group
                 label.col-sm-2.control-label Başlık
@@ -115,23 +115,24 @@ html
                 div.col-sm-offset-2.col-sm-10
                   input(type="submit", value="Tamam", name="saveEvent").btn.btn-success.pull-right.event-send
 
-      //- div.modal.fade#events-modal
-      //-   .modal-dialog
-      //-     .modal-content
-      //-       .modal-header
-      //-         button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
-      //-         h3.modal-title Event
-      //-       div(style="height: 400px").modal-body
-      //-       .modal-footer
-      //-         a(href="#" data-dismiss="modal").btn Close
+          div(tabindex="1", role="dialog", aria-labelledby="myModalLabel").modal.fade#events-modal
+            .modal-dialog(role="document")
+              .modal-header
+                button(type="button", data-dismiss="modal", aria-label="Close").close
+                  span(aria-hidden="true") &times;
+                h4().modal-title#myModalLabel Modal title
+              .modal-body
+              .modal-footer
+                button(type="button", data-dismiss="modal").btn.btn-default Close
+                button(type="button", data-dismiss="modal").btn.btn-primary Save changes
 
-      #events-modal.modal.hide.fade
-        .modal-header
-          button(type="button", data-dismiss="modal", aria-hidden="true").close &times;
-          h3 Event
-        .modal-body(style="height: 400px")
-        .modal-footer
-          a(href="#", data-dismiss="modal").btn Close
+      //- #events-modal.modal.hide.fade
+      //-   .modal-header
+      //-     button(type="button", data-dismiss="modal", aria-hidden="true").close &times;
+      //-     h3 Event
+      //-   .modal-body(style="height: 400px")
+      //-   .modal-footer
+      //-     a(href="#", data-dismiss="modal").btn Close
 
       //- Container Bitiyor
 
@@ -143,26 +144,16 @@ html
         i Eren Yatçılık
         a(href="#").pull-right up
 
-
     script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js")
-    script(src="js/bootstrap.min.js")
-    script(src="lib/jquery/dist/jquery.js")
+    //- script(src="js/bootstrap.min.js")
+    //- script(src="lib/jquery/dist/jquery.js")
     script(src="lib/bootstrap/dist/js/bootstrap.js")
     script(src="lib/underscore/underscore.js")
     script(src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js")
     script(src="lib/moment/moment.js")
-    script(src="lib/bootstrap-calendar/js/calendar.js")
+    script(type="text/javascript", src="lib/bootstrap-calendar/js/language/tr-TR.js")
+    script(src="lib/bootstrap-calendar/js/calendar.min.js")
     script(src="lib/bootstrap-calendar/js/app.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js")
-    script(src="lib/bootstrap-calendar/js/calendar.js")
-    script(src="lib/bootstrap-calendar/js/calendar.js")
     script(src="scripts/toastrJs.js")
-    script(type="text/javascript").
-        //-  var toastrJs.init();
-        var calendar = $('#calendar').calendar({
-          tmpl_path: "lib/bootstrap-calendar/tmpls/",
-          day: "#{ model.dateTime }",
-          language: 'tr-TR',
-          modal:"#events-modal",
-          events_source: #{ model.events.results}
-        });
+        

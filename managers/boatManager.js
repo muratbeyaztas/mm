@@ -5,22 +5,31 @@ var express = require('express'),
 	objectId = require('mongodb').ObjectID;
 
 
-var router = express.Router();
-var indexpage = "./boat/index";
-var viewmodel = {
-	boats: {},
-	error: ""
-};
-var boatCollectionName = "Boats";
-var boatModel = {
-	id: '',
-	name: '',
-	createdDate: ''
+var router = express.Router(),
+	indexpage = "./boat/index",
+	boatCollectionName = "Boats";
+
+
+// Model begins
+function boatViewModel(boats, error) {
+	this.boats = boats || [];
+	this.error = error || "";
 }
 
+function boatModel(id, name, createdDate) {
+	this.id = id || 0;
+	this.name = name || "";
+	this.createdDate = createdDate;
+}
+// Model ends
 
-router.get(['/', '/liste'], function (req, res) {
+router.get(['/', '/liste'], getBoats);
+router.get('/sil/:boatId', deleteBoat);
+router.post('/ekle', addBoat);
 
+function getBoats(req, res) {
+
+	var viewmodel = new boatViewModel();
 	mongoClient.connect(storeData.mongoConString, function (err, db) {
 		if (!err) {
 			var boatCollection = db.collection(boatCollectionName);
@@ -40,12 +49,11 @@ router.get(['/', '/liste'], function (req, res) {
 			res.render(indexpage, { model: viewmodel });
 		}
 	});
-	// res.render('./boat/index', { title: 'Murat, World!' } );	
-});
+}
 
+function deleteBoat(req, res) {
 
-router.get('/sil/:boatId', function (req, res) {
-
+	var viewmodel = new boatViewModel();
 	var boatId = req.params.boatId;
 	mongoClient.connect(storeData.mongoConString, function (err, db) {
 
@@ -56,17 +64,20 @@ router.get('/sil/:boatId', function (req, res) {
 			var boatColletion = db.collection(boatCollectionName);
 			boatColletion.deleteOne({ "_id": new objectId(boatId) }, function (err, result) {
 				viewmodel.error = "kayıt başarıyla silindi. DeletedCount: " + result.deletedCount;
-				res.redirect("./");
+				res.redirect("/tekne/liste");
 			});
 		}
 	});
-});
+}
 
-router.post('/ekle', function (req, res) {
+function addBoat(req, res) {
 
+	var viewmodel = new boatViewModel();
+	var boatmodel = new boatModel();
 	mongoClient.connect(storeData.mongoConString, function (err, db) {
 
 		var boatname = req.body.bname;
+		var boatCollection = db.collection(boatCollectionName);
 		if (err) {
 			viewmodel.error = "database bağlanılamadı";
 		}
@@ -77,11 +88,11 @@ router.post('/ekle', function (req, res) {
 			});
 		}
 		else {
-			var boatCollection = db.collection(boatCollectionName);
-			boatModel.name = boatname;
-			boatModel.createdDate = new Date();
+			boatCollection = db.collection(boatCollectionName);
+			boatmodel.name = boatname;
+			boatmodel.createdDate = new Date();
 
-			boatCollection.insert(boatModel, function (err, result) {
+			boatCollection.insert(boatmodel, function (err, result) {
 
 				if (err) {
 					viewmodel.err = "tekne kaydedilemedi: error: " + JSON.stringfy(err);
@@ -92,10 +103,10 @@ router.post('/ekle', function (req, res) {
 				}
 			});
 
-			res.redirect("./");
+			res.redirect("/tekne/liste");
 		};
 		db.close();
 	});
-});
+}
 
 module.exports = router;

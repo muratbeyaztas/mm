@@ -1,6 +1,7 @@
 
+
 var storeData = {
-    mongoConString: ""
+    mongoConString: ''
 };
 
 module.exports = storeData;
