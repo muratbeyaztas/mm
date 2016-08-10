@@ -23,12 +23,14 @@ function boatModel(id, name, createdDate) {
 }
 // Model ends
 
-router.get(['/', '/liste'], getBoats);
 router.get('/sil/:boatId', deleteBoat);
 router.post('/ekle', addBoat);
+router.get(['/', '/liste'], getBoats);
+
 
 function getBoats(req, res) {
 
+	req.authenticated.reset();
 	var viewmodel = new boatViewModel();
 	mongoClient.connect(storeData.mongoConString, function (err, db) {
 		if (!err) {

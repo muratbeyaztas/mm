@@ -20,10 +20,10 @@ function eventViewModel(boats) {
 	this.boats = boats || [];
 }
 
+router.post('/kaydet', saveEvent);
+router.get('/eventler', getEventsByRange);
+router.get('/detay/:id', getEventDetail)
 router.use('/', getEvents);
-router.use('/kaydet', saveEvent);
-router.use('/eventler', getEventsByRange);
-router.use('/detay/:id', getEventDetail)
 
 function getEventDetail(req, res) {
 
