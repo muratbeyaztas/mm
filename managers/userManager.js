@@ -1,6 +1,5 @@
 
-var session = require('client-sessions'),
-    express = require('express'),
+var express = require('express'),
     router = express.Router(),
     mongoClient = require('mongodb').MongoClient,
     storeManager = require('./storeManager'),
@@ -17,7 +16,7 @@ function loginViewModel(error) {
 //models end
 
 // app.use(authenticate);
-router.use('/', login);
+router.get('/', login);
 
 function login(req, res) {
 
@@ -47,6 +46,10 @@ function authenticate(req, res, next) {
     var username = req.body.username,
         password = req.body.password;
 
+    if(req.authenticated && req.authenticated.user){
+        return next();
+    }
+
     if (!username && !password) {
         return res.redirect('/giris');
     }
@@ -65,16 +68,15 @@ function authenticate(req, res, next) {
             }
 
             if (username == result.username && password == result.password) {
-                req.session.user = result;
+                req.authenticated.user = result;
             }
             else {
-                req.session.reset();
+                req.authenticated.reset();
             }
         });
 
         next();
     });
 }
-
 
 module.exports = { router: router, authenticate: authenticate };
