@@ -8,9 +8,10 @@ var express = require('express'),
 	appsettings = require("./appsettings.json");
 
 
-var eventManager = require('./managers/EventManager'),
+var eventManager = require('./managers/eventManager'),
 	boatManagr = require('./managers/boatManager'),
-	storeData = require('./managers/storeManager');
+	storeData = require('./managers/storeManager'),
+	userManager = require('./managers/userManager');
 
 var app = express(),
 	port = 5000,
@@ -38,8 +39,11 @@ app.use(function(req, res, next) {
     }
 });
 
+app.use(userManager.authenticate);
+
 app.use(['/', '/etkinlik'],eventManager);
 app.use('/tekne',boatManagr);
+app.use('/giris', userManager.router);
 
 app.listen(port, function(error){
 	if(error){
