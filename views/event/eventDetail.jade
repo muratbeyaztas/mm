@@ -34,4 +34,4 @@ div.panel.panel-primary
         br
         .input-group
             span.input-group-addon#hasMeail Yemekli mi?
-            input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasMeail }").form-control
+            input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasMeail == 'on' ? 'evet' : 'hayır' }").form-control

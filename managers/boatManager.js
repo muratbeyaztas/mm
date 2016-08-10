@@ -7,7 +7,7 @@ var express = require('express'),
 
 var router = express.Router(),
 	indexpage = "./boat/index",
-	boatCollectionName = "Boats";
+	boatCollectionName = "boats";
 
 
 // Model begins

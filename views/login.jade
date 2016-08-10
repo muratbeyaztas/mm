@@ -1,0 +1,172 @@
+doctype html
+html(lang='tr')
+  head
+    title #{title}
+    meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+    meta(charset="utf-8")
+    meta(name="generator", content="Bootply")
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    style.
+      body {
+        padding-top: 90px;
+      }
+      .panel-login {
+        border-color: #ccc;
+        -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+      }
+      .panel-login>.panel-heading {
+        color: #00415d;
+        background-color: #fff;
+        border-color: #fff;
+        text-align:center;
+      }
+      .panel-login>.panel-heading a{
+        text-decoration: none;
+        color: #666;
+        font-weight: bold;
+        font-size: 15px;
+        -webkit-transition: all 0.1s linear;
+        -moz-transition: all 0.1s linear;
+        transition: all 0.1s linear;
+      }
+      .panel-login>.panel-heading a.active{
+        color: #029f5b;
+        font-size: 18px;
+      }
+      .panel-login>.panel-heading hr{
+        margin-top: 10px;
+        margin-bottom: 0px;
+        clear: both;
+        border: 0;
+        height: 1px;
+        background-image: -webkit-linear-gradient(left,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.15),rgba(0, 0, 0, 0));
+        background-image: -moz-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+        background-image: -ms-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+        background-image: -o-linear-gradient(left,rgba(0,0,0,0),rgba(0,0,0,0.15),rgba(0,0,0,0));
+      }
+      .panel-login input[type="text"],.panel-login input[type="email"],.panel-login input[type="password"] {
+        height: 45px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        -webkit-transition: all 0.1s linear;
+        -moz-transition: all 0.1s linear;
+        transition: all 0.1s linear;
+      }
+      .panel-login input:hover,
+      .panel-login input:focus {
+        outline:none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        border-color: #ccc;
+      }
+      .btn-login {
+        background-color: #59B2E0;
+        outline: none;
+        color: #fff;
+        font-size: 14px;
+        height: auto;
+        font-weight: normal;
+        padding: 14px 0;
+        text-transform: uppercase;
+        border-color: #59B2E6;
+      }
+      .btn-login:hover,
+      .btn-login:focus {
+        color: #fff;
+        background-color: #53A3CD;
+        border-color: #53A3CD;
+      }
+      .forgot-password {
+        text-decoration: underline;
+        color: #888;
+      }
+      .forgot-password:hover,
+      .forgot-password:focus {
+        text-decoration: underline;
+        color: #666;
+      }
+      .btn-register {
+        background-color: #1CB94E;
+        outline: none;
+        color: #fff;
+        font-size: 14px;
+        height: auto;
+        font-weight: normal;
+        padding: 14px 0;
+        text-transform: uppercase;
+        border-color: #1CB94A;
+      }
+      .btn-register:hover,
+      .btn-register:focus {
+        color: #fff;
+        background-color: #1CA347;
+        border-color: #1CA347;
+      }
+  body
+    .container
+      .row
+        .col-md-6.col-md-offset-3
+          .panel.panel-login
+            .panel-heading
+              .row
+                .col-xs-12
+                  a#login-form-link.active(href='#') Giris
+                //- .col-xs-6
+                //-   a#register-form-link(href='#') Kayıt Ol
+              hr
+            .panel-body
+              .row
+                .col-lg-12
+                  form#login-form(action='/etkinlik', method='post', role='form', style='display: block;')
+                    .form-group
+                      input#username.form-control(type='text', name='username', tabindex='1', placeholder='Kullanıcı Adı', value='')
+                    .form-group
+                      input#password.form-control(type='password', name='password', tabindex='2', placeholder='Şifre')
+                    .form-group.text-center
+                      input#remember(type='checkbox', tabindex='3', name='remember')
+                      label(for='remember')  Beni Hatırla
+                    .form-group
+                      .row
+                        .col-sm-6.col-sm-offset-3
+                          input#login-submit.form-control.btn.btn-login(type='submit', name='login-submit', tabindex='4', value='Giriş')
+                    //- .form-group
+                    //-   .row
+                    //-     .col-lg-12
+                    //-       .text-center
+                    //-         a.forgot-password(href='/sifremi-unuttum', tabindex='5') Şifremi Unuttum?
+                //-   form#register-form(action='http://phpoll.com/register/process', method='post', role='form', style='display: none;')
+                //-     .form-group
+                //-       input#username.form-control(type='text', name='username', tabindex='1', placeholder='Username', value='')
+                //-     .form-group
+                //-       input#email.form-control(type='email', name='email', tabindex='1', placeholder='Email Address', value='')
+                //-     .form-group
+                //-       input#password.form-control(type='password', name='password', tabindex='2', placeholder='Password')
+                //-     .form-group
+                //-       input#confirm-password.form-control(type='password', name='confirm-password', tabindex='2', placeholder='Confirm Password')
+                //-     .form-group
+                //-       .row
+                //-         .col-sm-6.col-sm-offset-3
+                //-           input#register-submit.form-control.btn.btn-register(type='submit', name='register-submit', tabindex='4', value='Register Now')
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js")
+    script(src="lib/bootstrap/dist/js/bootstrap.js")
+    script.
+      $(function() {
+        $('#login-form-link').click(function(e) {
+            $("#login-form").delay(100).fadeIn(100);
+            $("#register-form").fadeOut(100);
+            $('#register-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
+        $('#register-form-link').click(function(e) {
+            $("#register-form").delay(100).fadeIn(100);
+            $("#login-form").fadeOut(100);
+            $('#login-form-link').removeClass('active');
+            $(this).addClass('active');
+            e.preventDefault();
+        });
+      });
