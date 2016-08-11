@@ -13,10 +13,12 @@ var eventManager = require('./managers/eventManager'),
 	boatManagr = require('./managers/boatManager'),
 	storeData = require('./managers/storeManager'),
 	userManager = require('./managers/userManager'),
-	urlManager = require('./managers/urlManager');
+	urlManager = require('./managers/urlManager'),
+	trackerManager = require('./managers/trackerManager');
 
 var app = express(),
-	port = 5000,
+	port = appsettings.environment.port,
+	host = appsettings.environment.host,
 	mongoClient = mongodb.MongoClient;
 
 storeData.mongoConString = appsettings.connectionStrings.mongoDev;
@@ -33,8 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.locals.pretty = true; //block html minifier. In prod remove comment this.
 
 app.use(sessions({
-	cookieName: 'authenticated', // cookie name dictates the key name added to the request object
-	secret: 'asd45asd2sdalk', // should be a large unguessable string
+	cookieName: appsettings.cookies.name, // cookie name dictates the key name added to the request object
+	secret: appsettings.cookies.secret, // should be a large unguessable string
 	// duration: 1 * 60 * 1000, // how long the session will stay valid in ms
 	// activeDuration: 1 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds,
 	cookie: {
@@ -45,6 +47,8 @@ app.use(sessions({
 		// secure: false // when true, cookie will only be sent over SSL. use key 'secureProxy' instead if you handle SSL not in your node process
 	}
 }));
+
+app.use(trackerManager);
 app.use(urlManager);
 app.use(userManager.authenticate);
 
@@ -53,7 +57,7 @@ app.use('/tekne', boatManagr);
 app.use('/giris', userManager.router);
 app.use(['/', '/etkinlik'], eventManager);
 
-app.listen(port, function (error) {
+app.listen(port, host, function (error) {
 	if (error) {
 		console.log(error);
 	}
