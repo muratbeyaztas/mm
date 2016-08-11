@@ -13,7 +13,8 @@ var eventManager = require('./managers/eventManager'),
 	boatManagr = require('./managers/boatManager'),
 	storeData = require('./managers/storeManager'),
 	userManager = require('./managers/userManager'),
-	urlManager = require('./managers/urlManager');
+	urlManager = require('./managers/urlManager'),
+	trackerManager = require('./managers/trackerManager');
 
 var app = express(),
 	port = appsettings.environment.port,
@@ -46,6 +47,8 @@ app.use(sessions({
 		// secure: false // when true, cookie will only be sent over SSL. use key 'secureProxy' instead if you handle SSL not in your node process
 	}
 }));
+
+app.use(trackerManager);
 app.use(urlManager);
 app.use(userManager.authenticate);
 
