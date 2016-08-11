@@ -16,7 +16,8 @@ var eventManager = require('./managers/eventManager'),
 	urlManager = require('./managers/urlManager');
 
 var app = express(),
-	port = 5000,
+	port = appsettings.environment.port,
+	host = appsettings.environment.host,
 	mongoClient = mongodb.MongoClient;
 
 storeData.mongoConString = appsettings.connectionStrings.mongoDev;
@@ -53,7 +54,7 @@ app.use('/tekne', boatManagr);
 app.use('/giris', userManager.router);
 app.use(['/', '/etkinlik'], eventManager);
 
-app.listen(port, function (error) {
+app.listen(port, host, function (error) {
 	if (error) {
 		console.log(error);
 	}
