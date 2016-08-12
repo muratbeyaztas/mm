@@ -6,7 +6,7 @@ var trackerCollectionName = "trackers";
 
 // model begins
 function trackerModel(req, res){
-    this.ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
+    this.ip = req.headers["x-real-ip"] || "bos";
     this.url = req.url;
     this.params = req.params;
     this.body = req.body;
