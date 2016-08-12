@@ -9,12 +9,12 @@ var express = require('express'),
 	sessions = require("client-sessions");
 
 
-var eventManager = require('./managers/eventManager'),
-	boatManagr = require('./managers/boatManager'),
-	userManager = require('./managers/userManager'),
-	urlManager = require('./managers/urlManager'),
-	databaseManager = require('./managers/databaseManager');
-	trackerManager = require('./managers/trackerManager');
+var eventManager = require('./managers/event-manager'),
+	boatManagr = require('./managers/boat-manager'),
+	userManager = require('./managers/user-manager'),
+	urlManager = require('./managers/url-manager'),
+	databaseManager = require('./managers/database-manager');
+	trackerManager = require('./managers/tracker-manager');
 
 var app = express(),
 	port = appsettings.environment.port,
