@@ -58,5 +58,5 @@ app.listen(port, host, function (error) {
 	if (error) {
 		console.log(error);
 	}
-	console.log('running server on port ' + port);
+	console.log('running server on '+ host +' on port ' + port);
 });
