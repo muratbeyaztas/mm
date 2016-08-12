@@ -6,7 +6,7 @@ var trackerCollectionName = "trackers";
 
 // model begins
 function trackerModel(req, res){
-    this.ip = req.ip;
+    this.ip = req.connection.remoteAddress;
     this.url = req.url;
     this.params = req.params;
     this.body = req.body;
@@ -15,6 +15,7 @@ function trackerModel(req, res){
     this.statusMessage = res.statusMessage;
     this.isAjaxReq = req.xhr;
     this.authenticated = req.authenticated;
+    this.date = new Date();
 }
 // model ends
 
