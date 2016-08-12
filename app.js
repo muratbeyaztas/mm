@@ -14,6 +14,7 @@ var eventManager = require('./managers/eventManager'),
 	userManager = require('./managers/userManager'),
 	urlManager = require('./managers/urlManager'),
 	databaseManager = require('./managers/databaseManager');
+	trackerManager = require('./managers/trackerManager');
 
 var app = express(),
 	port = appsettings.environment.port,
@@ -37,9 +38,10 @@ app.locals.pretty = true; //block html minifier. In prod remove comment this.
 
 // app.use(databaseManager.init);
 app.use(sessions({
-	cookieName: 'authenticated', // cookie name dictates the key name added to the request object
-	secret: 'asd45asd2sdalk', // should be a large unguessable string
 	duration: 1 * 60 * 1000, // how long the session will stay valid in ms
+	cookieName: appsettings.cookies.name, // cookie name dictates the key name added to the request object
+	secret: appsettings.cookies.secret, // should be a large unguessable string
+	// duration: 1 * 60 * 1000, // how long the session will stay valid in ms
 	// activeDuration: 1 * 60 * 1000, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds,
 	cookie: {
 		// path: '/api', // cookie will only be sent to requests under '/api'
@@ -49,6 +51,8 @@ app.use(sessions({
 		// secure: false // when true, cookie will only be sent over SSL. use key 'secureProxy' instead if you handle SSL not in your node process
 	}
 }));
+
+app.use(trackerManager);
 app.use(urlManager);
 app.use(userManager.authenticate);
 

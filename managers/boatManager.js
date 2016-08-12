@@ -30,22 +30,15 @@ router.get(['/', '/liste'], getBoats);
 function getBoats(req, res) {
 
 	var db = req.app.locals.db;
-	req.authenticated.reset();
 	var viewmodel = new boatViewModel();
-	if (!err) {
-		var boatCollection = db.collection(boatCollectionName);
-		boatCollection.find().sort({ "createdDate": -1 }).toArray(function (err, boats) {
+	var boatCollection = db.collection(boatCollectionName);
+	boatCollection.find().sort({ "createdDate": -1 }).toArray(function (err, boats) {
 
-			viewmodel.error = "";
-			viewmodel.boats = boats;
-			res.render(indexpage, { model: viewmodel });
-		});
-	}
-	else {
-		viewmodel.boats = [];
-		viewmodel.error = "database bağlanılamadı!!";
+		viewmodel.error = "";
+		viewmodel.boats = boats;
 		res.render(indexpage, { model: viewmodel });
-	}
+	});
+
 }
 
 function deleteBoat(req, res) {
@@ -53,16 +46,11 @@ function deleteBoat(req, res) {
 	var db = req.app.locals.db;
 	var viewmodel = new boatViewModel();
 	var boatId = req.params.boatId;
-	if (err) {
-		viewmodel.error = "database bağlantısında sorun var";
-	}
-	else {
-		var boatColletion = db.collection(boatCollectionName);
-		boatColletion.deleteOne({ "_id": new objectId(boatId) }, function (err, result) {
-			viewmodel.error = "kayıt başarıyla silindi. DeletedCount: " + result.deletedCount;
-			res.redirect("/tekne/liste");
-		});
-	}
+	var boatColletion = db.collection(boatCollectionName);
+	boatColletion.deleteOne({ "_id": new objectId(boatId) }, function (err, result) {
+		viewmodel.error = "kayıt başarıyla silindi. DeletedCount: " + result.deletedCount;
+		res.redirect("/tekne/liste");
+	});
 }
 
 function addBoat(req, res) {
@@ -73,9 +61,6 @@ function addBoat(req, res) {
 
 	var boatname = req.body.bname;
 	var boatCollection = db.collection(boatCollectionName);
-	if (err) {
-		viewmodel.error = "database bağlanılamadı";
-	}
 	if (!boatname) {
 		viewmodel.error = "tekne ismini boş bırakmayaınız";
 		boatCollection.find().toArray(function (err, result) {

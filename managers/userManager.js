@@ -14,7 +14,6 @@ function loginViewModel(error) {
 }
 //models end
 
-// app.use(authenticate);
 router.get('/', login);
 
 function login(req, res) {
