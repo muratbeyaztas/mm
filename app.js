@@ -57,9 +57,17 @@ app.use(urlManager);
 app.use(userManager.authenticate);
 
 
+
 app.use('/tekne', boatManagr);
 app.use('/giris', userManager.router);
 app.use(['/', '/etkinlik'], eventManager);
+
+
+app.use(function(err, req, res, next){
+
+  res.status(err.status || 500);
+  res.render('./error/500', { error: err });
+});
 
 app.listen(port, host, function (error) {
 	if (error) {
