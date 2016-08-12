@@ -3,8 +3,7 @@ var express = require('express'),
 	router = express.Router(),
 	mongoClient = require('mongodb').MongoClient,
 	ObjectId = require('mongodb').ObjectID,
-	dateFormat = require('dateformat'),
-	storeManager = require('./storeManager');
+	dateFormat = require('dateformat');
 
 var eventCollectionName = "events",
 	layoutPageName = "./layout",
@@ -27,63 +26,51 @@ router.use('/', getEvents);
 
 function getEventDetail(req, res) {
 
+	var db = req.app.locals.db;
 	var eventid = req.params.id;
-	mongoClient.connect(storeManager.mongoConString, function (err, db) {
+	db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function (err, doc) {
 
-		db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function (err, doc) {
-
-			db.collection(boatColletionName).findOne({ _id: new ObjectId(doc.bootType) }, function (err, docBoat) {
-
-				doc.bootType = docBoat.name;
-				if (db) {
-					db.close();
-				}
-				res.render(eventDetailPageName, { model: doc });
-			});
+		db.collection(boatColletionName).findOne({ _id: new ObjectId(doc.bootType) }, function (err, docBoat) {
+			
+			doc.bootType = docBoat.name;
+			res.render(eventDetailPageName, { model: doc });
 		});
 	});
 }
 
 function getEventsByRange(req, res) {
 
+	var db = req.app.locals.db;
 	var calenderEvents = new getEventsViewModel();
 	var from = req.query.from,
 		to = req.query.to;
 
 	from = dateFormat(new Date(parseInt(from)), "yyyy-mm-ddTHH:MM:ss");
 	to = dateFormat(new Date(parseInt(to)), "yyyy-mm-ddTHH:MM:ss");
+	calenderEvents.success = 0;
+	var eventCollection = db.collection(eventCollectionName);
+	var evnts = eventCollection.find({ startDate: { $gt: from, $lt: to } }).sort({ startDate: -1 });
 
-	mongoClient.connect(storeManager.mongoConString, function (err, db) {
-
-		calenderEvents.success = 0;
-		if (!err) {
-			var eventCollection = db.collection(eventCollectionName);
-			var evnts = eventCollection.find({ startDate: { $gt: from, $lt: to } }).sort({ startDate: -1 });
-
-			evnts.each(function (err, evnt) {
-
-				if (!evnt) {
-					calenderEvents.success = 1;
-					res.send(calenderEvents);
-				}
-				else {
-					calenderEvents.result.push({
-						id: evnt._id.toString(),
-						title: evnt.description,
-						url: '/detay/' + evnt._id,
-						class: "event-important",
-						start: new Date(evnt.startDate).getTime(),
-						end: new Date(evnt.startDate).setDate(new Date(evnt.startDate).getDate() + 1)
-					});
-				}
+	evnts.each(function (err, evnt) {
+		if (!evnt) {
+			calenderEvents.success = 1;
+			res.send(calenderEvents);
+		}
+		else {
+			calenderEvents.result.push({
+				id: evnt._id.toString(),
+				title: evnt.description,
+				url: '/detay/' + evnt._id,
+				class: "event-important",
+				start: new Date(evnt.startDate).getTime(),
+				end: new Date(evnt.startDate).setDate(new Date(evnt.startDate).getDate() + 1)
 			});
-		} else {
-			res.send("db bağlantısında sorun var");
 		}
 	});
 }
 
 function convertToClientEventModel(event) {
+
 	var clientEventModel = {
 		id: '',
 		title: '',
@@ -107,24 +94,19 @@ function convertToClientEventModel(event) {
 
 function getEvents(req, res) {
 
+	var db = req.app.locals.db;
 	var viewmodel = new eventViewModel();
-	mongoClient.connect(storeManager.mongoConString, function (err, db) {
+	var boats = db.collection(boatColletionName);
+	boats.find().toArray(function (err, results) {
 
-		var boats = db.collection(boatColletionName);
-		boats.find().toArray(function (err, results) {
-
-			if (db) {
-				db.close();
-			}
-
-			viewmodel.boats = results;
-			res.render(layoutPageName, { model: viewmodel });
-		});
+		viewmodel.boats = results;
+		res.render(layoutPageName, { model: viewmodel });
 	});
 }
 
 function saveEvent(req, res) {
 
+	var db = req.app.locals.db;
 	var eventModel = {
 		bootType: req.body.bootType,
 		subject: req.body.eventSubject,
@@ -138,12 +120,9 @@ function saveEvent(req, res) {
 		hasMeail: req.body.hasMeal
 	};
 
-	mongoClient.connect(storeManager.mongoConString, function (err, db) {
-		var eventCollection = db.collection(eventCollectionName);
-		eventCollection.insert(eventModel, function (err, result) {
-			db.close();
-			res.redirect("/");
-		});
+	var eventCollection = db.collection(eventCollectionName);
+	eventCollection.insert(eventModel, function (err, result) {
+		res.redirect("/");
 	});
 }
 

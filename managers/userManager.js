@@ -2,7 +2,6 @@
 var express = require('express'),
     router = express.Router(),
     mongoClient = require('mongodb').MongoClient,
-    storeManager = require('./storeManager'),
     app = express();
 
 var userCollectionName = "users",
@@ -41,12 +40,13 @@ function authenticate(req, res, next) {
     if (req.url === "/giris") {
         return next();
     }
+    var db = req.app.locals.db;
     //console.log(req.url);
     var viewmodel = new loginViewModel();
     var username = req.body.username,
         password = req.body.password;
 
-    if(req.authenticated && req.authenticated.user){
+    if (req.authenticated && req.authenticated.user) {
         return next();
     }
 
@@ -54,29 +54,27 @@ function authenticate(req, res, next) {
         return res.redirect('/giris');
     }
 
-    mongoClient.connect(storeManager.mongoConString, function (err, db) {
 
-        if (!db) {
-            return res.redirect('/giris?mc=0x0');
+    if (!req.app.locals.db) {
+        return res.redirect('/giris?mc=0x0');
+    }
+
+    users = db.collection(userCollectionName);
+    users.findOne({ username: username, password: password }, function (err, result) {
+
+        if (!result) {
+            return res.redirect('/giris?mc=0x1');
         }
 
-        users = db.collection(userCollectionName);
-        users.findOne({ username: username, password: password }, function (err, result) {
-
-            if (!result) {
-                return res.redirect('/giris?mc=0x1');
-            }
-
-            if (username == result.username && password == result.password) {
-                req.authenticated.user = result;
-            }
-            else {
-                req.authenticated.reset();
-            }
-        });
-
-        next();
+        if (username == result.username && password == result.password) {
+            req.authenticated.user = result;
+        }
+        else {
+            req.authenticated.reset();
+        }
     });
+
+    next();
 }
 
 module.exports = { router: router, authenticate: authenticate };
