@@ -1,37 +1,34 @@
 
 
-div.panel.panel-primary
-    .panel-heading
-        h3.panel-title Panel Title
-    .panel-body
-        .input-group
-            span.input-group-addon#bootType Tekne Adı
-            input( type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.bootType }").form-control
-        br
-        .input-group
-            span.input-group-addon#subject Konu
-            input( type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
-        br
-        .input-group
-            span.input-group-addon#startDate Başlangıç Zamanı
-            input( type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDate }").form-control
-        br
-        .input-group
-            span.input-group-addon#personCount Kişi Sayısı
-            input( type="text", placeholder="Kişi Sayısı", aria-describedby="personCount", value="#{ model.personCount }").form-control
-        br
-        .input-group
-            span.input-group-addon#startEndLocation Başlangıç - Bitiş Noktası
-            input( type="text", placeholder="Başlangıç - Bitiş Noktası", aria-describedby="startEndLocation", value="#{ model.startLocation } - #{ model.endLocation }").form-control
-        br
-        .input-group
-            span.input-group-addon#payment Ödeme
-            input( type="text", placeholder="Ödeme", aria-describedby="payment", value="#{ model.payment }").form-control
-        br
-        .input-group
-            span.input-group-addon#description Açıklama
-            input( type="text", placeholder="Açıklama", aria-describedby="description", value="#{ model.description }").form-control
-        br
-        .input-group
-            span.input-group-addon#hasMeail Yemekli mi?
-            input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasMeail == 'on' ? 'evet' : 'hayır' }").form-control
+div
+    .input-group
+        span.input-group-addon#bootType Tekne Adı
+        input( type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.bootType }").form-control
+    br
+    .input-group
+        span.input-group-addon#subject Konu
+        input( type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
+    br
+    .input-group
+        span.input-group-addon#startDate Başlangıç Zamanı
+        input( type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDate }").form-control
+    br
+    .input-group
+        span.input-group-addon#personCount Kişi Sayısı
+        input( type="text", placeholder="Kişi Sayısı", aria-describedby="personCount", value="#{ model.personCount }").form-control
+    br
+    .input-group
+        span.input-group-addon#startEndLocation Başlangıç - Bitiş Noktası
+        input( type="text", placeholder="Başlangıç - Bitiş Noktası", aria-describedby="startEndLocation", value="#{ model.startLocation } - #{ model.endLocation }").form-control
+    br
+    .input-group
+        span.input-group-addon#payment Ödeme
+        input( type="text", placeholder="Ödeme", aria-describedby="payment", value="#{ model.payment }").form-control
+    br
+    .input-group
+        span.input-group-addon#description Açıklama
+        input( type="text", placeholder="Açıklama", aria-describedby="description", value="#{ model.description }").form-control
+    br
+    .input-group
+        span.input-group-addon#hasMeail Yemekli mi?
+        input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasMeail == 'on' ? 'evet' : 'hayır' }").form-control
