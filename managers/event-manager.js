@@ -24,6 +24,7 @@ router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
 router.get('/', getEvents);
+router.post('/', getEvents);
 
 function getEventDetail(req, res) {
 
