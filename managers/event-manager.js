@@ -1,14 +1,15 @@
 
 var express = require('express'),
-	router = express.Router(),
-	mongoClient = require('mongodb').MongoClient,
-	ObjectId = require('mongodb').ObjectID,
-	dateFormat = require('dateformat');
+	dateFormat = require('dateformat'),
+	databaseManager = require('./database-manager'),
+	mongoose = require('mongoose');
+
 
 var eventCollectionName = "events",
 	layoutPageName = "./layout",
 	boatColletionName = "boats",
-	eventDetailPageName = "./event/eventDetail";
+	eventDetailPageName = "./event/eventDetail",
+	router = express.Router();
 
 function getEventsViewModel(success, result) {
 	this.success = success || '1';
@@ -21,18 +22,20 @@ function eventViewModel(boats) {
 
 router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
-router.get('/detay/:id', getEventDetail)
-router.use('/', getEvents);
+router.get('/detay/:id', getEventDetail);
+router.get('/', getEvents);
 
 function getEventDetail(req, res) {
 
-	var db = req.app.locals.db;
 	var eventid = req.params.id;
-	db.collection(eventCollectionName).findOne({ _id: new ObjectId(eventid) }, function (err, doc) {
-
-		db.collection(boatColletionName).findOne({ _id: new ObjectId(doc.bootType) }, function (err, docBoat) {
-			
-			doc.bootType = docBoat.name;
+	var evnts = databaseManager.getEventModel();
+	evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function (err, doc) {
+		
+		doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
+		var boats = databaseManager.getBoatModel();
+		boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function (err, boat) {
+			doc.boatName = boat.name;
+			console.log(doc.startDateTime);
 			res.render(eventDetailPageName, { model: doc });
 		});
 	});
@@ -40,88 +43,61 @@ function getEventDetail(req, res) {
 
 function getEventsByRange(req, res) {
 
-	var db = req.app.locals.db;
 	var calenderEvents = new getEventsViewModel();
-	var from = req.query.from,
+	var frm = req.query.from,
 		to = req.query.to;
 
-	from = dateFormat(new Date(parseInt(from)), "yyyy-mm-ddTHH:MM:ss");
-	to = dateFormat(new Date(parseInt(to)), "yyyy-mm-ddTHH:MM:ss");
+	frm = new Date(parseInt(frm));
+	to = new Date(parseInt(to));
 	calenderEvents.success = 0;
-	var eventCollection = db.collection(eventCollectionName);
-	var evnts = eventCollection.find({ startDate: { $gt: from, $lt: to } }).sort({ startDate: -1 });
 
-	evnts.each(function (err, evnt) {
-		if (!evnt) {
-			calenderEvents.success = 1;
-			res.send(calenderEvents);
-		}
-		else {
+	var evnts = databaseManager.getEventModel();
+	evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function (err, results) {
+
+		results.forEach(function (evnt) {
+
 			calenderEvents.result.push({
 				id: evnt._id.toString(),
-				title: evnt.description,
+				title: evnt.subject,
 				url: '/detay/' + evnt._id,
 				class: "event-important",
 				start: new Date(evnt.startDate).getTime(),
 				end: new Date(evnt.startDate).setDate(new Date(evnt.startDate).getDate() + 1)
 			});
-		}
+		});
+
+		calenderEvents.success = 1;
+		res.send(calenderEvents);
 	});
-}
-
-function convertToClientEventModel(event) {
-
-	var clientEventModel = {
-		id: '',
-		title: '',
-		url: '',
-		class: '',
-		start: '',
-		end: ''
-	};
-	if (event) {
-		var clientEventModel = {
-			id: event._id.toString(),
-			title: event.subject,
-			url: '#events-modal',
-			class: 'event-important',
-			start: new Date(event.startDate).getTime(), // Milliseconds
-			end: new Date().setDate(new Date(event.startDate).getTime() + 1) // Milliseconds
-		};
-	}
-	return clientEventModel;
 }
 
 function getEvents(req, res) {
 
-	var db = req.app.locals.db;
 	var viewmodel = new eventViewModel();
-	var boats = db.collection(boatColletionName);
-	boats.find().toArray(function (err, results) {
+	var boats = databaseManager.getBoatModel();
+	boats.find({}, function (err, boats) {
 
-		viewmodel.boats = results;
-		res.render(layoutPageName, { model: viewmodel });
+		viewmodel.boats = boats;
+		return res.render(layoutPageName, { model: viewmodel });
 	});
 }
 
 function saveEvent(req, res) {
 
-	var db = req.app.locals.db;
-	var eventModel = {
-		bootType: req.body.bootType,
-		subject: req.body.eventSubject,
-		startDate: req.body.startDate,
-		startTime: req.body.startTime,
-		personCount: req.body.guestCount,
-		startLocation: req.body.startLocation,
-		endLocation: req.body.endLocation,
-		payment: req.body.payment,
-		description: req.body.eventDescription,
-		hasMeail: req.body.hasMeal
-	};
+	var eventModel = databaseManager.getEventModel();
+	var newEvent = new eventModel();
+	newEvent.boatId = req.body.bootType;
+	newEvent.subject = req.body.eventSubject;
+	newEvent.description = req.body.eventDescription;
+	newEvent.startDate = new Date(req.body.startDate);
+	newEvent.duringTime = req.body.startTime;
+	newEvent.personCount = req.body.guestCount;
+	newEvent.startLocation = req.body.startLocation;
+	newEvent.endLocation = req.body.endLocation;
+	newEvent.fee = req.body.payment;
+	newEvent.hasDinner = req.body.hasMeal === 'on';
 
-	var eventCollection = db.collection(eventCollectionName);
-	eventCollection.insert(eventModel, function (err, result) {
+	newEvent.save(function (err, evnt) {
 		res.redirect("/");
 	});
 }

@@ -1,7 +1,8 @@
 
 var express = require('express'),
-    router = express.Router(),
-    mongoClient = require('mongodb').MongoClient,
+    databaseManager = require('./database-manager');
+
+var router = express.Router(),
     app = express();
 
 var userCollectionName = "users",
@@ -39,8 +40,6 @@ function authenticate(req, res, next) {
     if (req.url === "/giris") {
         return next();
     }
-    var db = req.app.locals.db;
-    //console.log(req.url);
     var viewmodel = new loginViewModel();
     var username = req.body.username,
         password = req.body.password;
@@ -53,24 +52,13 @@ function authenticate(req, res, next) {
         return res.redirect('/giris');
     }
 
-
-    if (!req.app.locals.db) {
-        return res.redirect('/giris?mc=0x0');
-    }
-
-    users = db.collection(userCollectionName);
-    users.findOne({ username: username, password: password }, function (err, result) {
+    var users = databaseManager.getUserModel();
+    users.findOne({ username: username.toLowerCase(), password: password }, function (err, result) {
 
         if (!result) {
             return res.redirect('/giris?mc=0x1');
         }
-
-        if (username == result.username && password == result.password) {
-            req.authenticated.user = result;
-        }
-        else {
-            req.authenticated.reset();
-        }
+        req.authenticated.user = result;
         next();
     });
 }

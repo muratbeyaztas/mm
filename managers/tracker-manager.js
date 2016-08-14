@@ -1,32 +1,29 @@
 
 
-var mongoClient = require('mongodb').MongoClient;
-var trackerCollectionName = "trackers";
+// var mongoClient = require('mongodb').MongoClient;
+// var trackerCollectionName = "trackers";
+var databaseManager = require('./database-manager');
 
 
-// model begins
-function trackerModel(req, res){
-    this.ip = req.headers["x-real-ip"] || "bos";
-    this.url = req.url;
-    this.params = req.params;
-    this.body = req.body;
-    this.query = req.query;
-    this.statusCode = res.statusCode;
-    this.statusMessage = res.statusMessage;
-    this.isAjaxReq = req.xhr;
-    this.authenticated = req.authenticated;
-    this.date = new Date();
-}
-// model ends
+function trackUrl(req, res, next) {
 
-
-function trackUrl(req, res, next){
-
-        var db = req.app.locals.db;
-        next();
-        var model = new trackerModel(req, res);
-        var trackers = db.collection(trackerCollectionName);
-        trackers.insert(model, function(err, result){});
+    next();
+    var tracker = databaseManager.getTrackerModel();
+    var newTracker = new tracker();
+    newTracker.ip = req.headers["x-real-ip"] || "bos";
+    newTracker.url = req.url;
+    newTracker.params = req.params || null;
+    newTracker.body = req.body || null;
+    newTracker.query = req.query || null;
+    newTracker.statusCode = res.statusCode;
+    newTracker.statusMessage = res.statusMessage;
+    newTracker.isAjaxReq = req.xhr;
+    newTracker.authenticated = req.authenticated;
+    newTracker.save(function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+    });
 }
 
 module.exports = trackUrl;

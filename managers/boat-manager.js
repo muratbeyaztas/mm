@@ -1,26 +1,12 @@
 var express = require('express'),
-	mongoClient = require('mongodb').MongoClient,
 	_ = require("underscore"),
-	objectId = require('mongodb').ObjectID;
+	databaseManage = require('./database-manager');
 
 
 var router = express.Router(),
 	indexpage = "./boat/index",
 	boatCollectionName = "boats";
 
-
-// Model begins
-function boatViewModel(boats, error) {
-	this.boats = boats || [];
-	this.error = error || "";
-}
-
-function boatModel(id, name, createdDate) {
-	this.id = id || 0;
-	this.name = name || "";
-	this.createdDate = createdDate;
-}
-// Model ends
 
 router.get('/sil/:boatId', deleteBoat);
 router.post('/ekle', addBoat);
@@ -29,16 +15,15 @@ router.get(['/', '/liste'], getBoats);
 
 function getBoats(req, res) {
 
-	var db = req.app.locals.db;
 	var viewmodel = new boatViewModel();
 	var boatCollection = db.collection(boatCollectionName);
-	boatCollection.find().sort({ "createdDate": -1 }).toArray(function (err, boats) {
+	var boats = databaseManage.getBoatModel();
 
+	boats.find().sort({ createdDate: -1 }).exec(function (err, results) {
 		viewmodel.error = "";
 		viewmodel.boats = boats;
 		res.render(indexpage, { model: viewmodel });
 	});
-
 }
 
 function deleteBoat(req, res) {
