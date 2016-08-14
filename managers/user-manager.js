@@ -71,9 +71,8 @@ function authenticate(req, res, next) {
         else {
             req.authenticated.reset();
         }
+        next();
     });
-
-    next();
 }
 
 module.exports = { router: router, authenticate: authenticate };
