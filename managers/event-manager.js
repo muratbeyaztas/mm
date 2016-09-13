@@ -30,7 +30,7 @@ function getEventDetail(req, res) {
 	var eventid = req.params.id;
 	var evnts = databaseManager.getEventModel();
 	evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function (err, doc) {
-		
+
 		doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
 		var boats = databaseManager.getBoatModel();
 		boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function (err, boat) {
@@ -95,8 +95,12 @@ function saveEvent(req, res) {
 	newEvent.startLocation = req.body.startLocation;
 	newEvent.endLocation = req.body.endLocation;
 	newEvent.fee = req.body.payment;
+	newEvent.sell = req.body.sale;
+	newEvent.earnestMoney = req.body.earnestMoney;
+	newEvent.moneyType1 = req.body.moneyType1;
+	newEvent.moneyType2 = req.body.moneyType2;
+	newEvent.moneyType3 = req.body.moneyType3;
 	newEvent.hasDinner = req.body.hasMeal === 'on';
-
 	newEvent.save(function (err, evnt) {
 		res.redirect("/");
 	});
