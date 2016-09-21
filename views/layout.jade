@@ -48,13 +48,13 @@ html
               .pull-right.form-inline
                 .btn-group
                   button(data-calendar-nav="prev").btn.btn-primary <<
-                  button(data-calendar-nav="today").btn Today
+                  button(data-calendar-nav="today").btn Bugün
                   button(data-calendar-nav="next").btn.btn-primary >>
                 .btn-group
-                    button(data-calendar-view="year").btn.btn-warning Year
-                    button(data-calendar-view="month").btn.btn-warning.active Month
-                    button(data-calendar-view="week").btn.btn-warning Week
-                    button(data-calendar-view="day").btn.btn-warning Day
+                    button(data-calendar-view="year").btn.btn-warning Yıl
+                    button(data-calendar-view="month").btn.btn-warning.active Ay
+                    button(data-calendar-view="week").btn.btn-warning Hafta
+                    button(data-calendar-view="day").btn.btn-warning Gün
               h3
             #calendar
           div(role="tabpanel").tab-pane#register
@@ -62,7 +62,7 @@ html
               .form-group
                 label.col-sm-2.control-label Tekne
                 .col-sm-10
-                  select(name="bootType", required data-error="Tekne seçmediniz!").form-control
+                  select(name="bootType", required, data-error="Tekne seçmediniz!").form-control
                     option(value="") Seçiniz
                     each boat in model.boats
                       option(value="#{ boat._id }") #{ boat.name }
@@ -75,7 +75,7 @@ html
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Tarih
                 .col-sm-10
-                  input(data-provide="datepicker", name="startDate", required, type="date", data-error="Etkinliğin başlangiç tarihini giriniz!", value="2016-08-04").form-control
+                  input(data-provide="datepicker", name="startDate", required, type="date", data-error="Etkinliğin başlangiç tarihini giriniz!", value="").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Saat
@@ -90,14 +90,38 @@ html
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Başlangıç - Bitiş Yeri
                 .col-sm-10
-                  input(style="margin-bottom:3px", name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control 
-                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="KADIKÖY").form-control 
+                  input(style="margin-bottom:3px", name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control
+                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="KADIKÖY").form-control
                   div.help-block.with-errors
-              .form-group
+              .form-group.money-type
                 label(for="inputEmail3").col-sm-2.control-label Ödeme
                 .col-sm-10
-                  input(style="width:90%; display:inline-block; margin-right:3px;", name="payment", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
-                  label TL
+                  input( name="payment", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
+                  //label TL
+                  select(name="moneyType1", required).form-control
+                    option TL
+                    option Dolar
+                    option Euro
+                  div.help-block.with-errors
+              .form-group.money-type
+                label(for="inputEmail3").col-sm-2.control-label Satış
+                .col-sm-10
+                  input( name="sale", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
+                  //label TL
+                  select(name="moneyType2", required).form-control
+                    option TL
+                    option Dolar
+                    option Euro
+                  div.help-block.with-errors
+              .form-group.money-type
+                label(for="inputEmail3").col-sm-2.control-label kapora
+                .col-sm-10
+                  input( name="earnestMoney", required, type="number", data-error="Kapora miktarını giriniz!", value="250").form-control
+                  //label TL
+                  select(name="moneyType3", required).form-control
+                    option TL
+                    option Dolar
+                    option Euro
                   div.help-block.with-errors
               .form-group
                   label.col-sm-2.ontrol-label Açıklama
@@ -154,4 +178,3 @@ html
     script(src="lib/bootstrap-calendar/js/app.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js")
     script(src="scripts/toastrJs.js")
-        

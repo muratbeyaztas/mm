@@ -38,6 +38,29 @@ body {
   .page-header > div {
     margin-bottom: 20px;
   }
+
+}
+.form-group.money-type {
+  input {
+    width: 75%;
+    display: inline-block;
+    float: left;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  select {
+    width: 25%;
+    display: inline-block;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: 3px;
+  }
+}
+.input-group.money-type {
+  input {
+    width: 75%;
+    &:last-child {width: 25%;}
+  }
 }
 
 
