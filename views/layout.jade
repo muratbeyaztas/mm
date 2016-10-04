@@ -77,20 +77,19 @@ html
                 .col-sm-10
                   input(data-provide="datepicker", name="startDate", required, type="date", data-error="Etkinliğin başlangiç tarihini giriniz!", value="").form-control
                   div.help-block.with-errors
-              .form-group
+              .form-group.input-type-2
                 label(for="inputEmail3").col-sm-2.control-label Saat
                 .col-sm-10
-                  input(placeholder="00:00", name="startTime", required, type="number", data-error="Etkinliğin başlangıç saatini giriniz!", value="10").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Kişi Sayısı
                 .col-sm-10
                   input(name="guestCount", required, type="number", data-error="Etkinliği katılacak kişi sayısını giriniz!", value="150").form-control
                   div.help-block.with-errors
-              .form-group
+              .form-group.input-type-2
                 label(for="inputEmail3").col-sm-2.control-label Başlangıç - Bitiş Yeri
                 .col-sm-10
-                  input(style="margin-bottom:3px", name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control
+                  input(name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control
                   input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="KADIKÖY").form-control
                   div.help-block.with-errors
               .form-group.money-type

@@ -48,7 +48,8 @@ var eventSchema = new schema({
 	subject: String,
 	description: String,
 	startDate: Date,
-	duringTime: Number,
+  startTime: Number,
+	endTime: Number,
 	personCount: Number,
 	startLocation: String,
 	endLocation: String,
@@ -58,7 +59,7 @@ var eventSchema = new schema({
   earnestMoney: Number,
   moneyType1: String,
   moneyType2: String,
-  moneyType3: String  
+  moneyType3: String
 });
 var trackerSchema = new schema({
 	ip: String,

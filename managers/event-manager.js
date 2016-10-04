@@ -90,7 +90,8 @@ function saveEvent(req, res) {
 	newEvent.subject = req.body.eventSubject;
 	newEvent.description = req.body.eventDescription;
 	newEvent.startDate = new Date(req.body.startDate);
-	newEvent.duringTime = req.body.startTime;
+	newEvent.startTime = req.body.startTime;
+	newEvent.endTime = req.body.endTime;
 	newEvent.personCount = req.body.guestCount;
 	newEvent.startLocation = req.body.startLocation;
 	newEvent.endLocation = req.body.endLocation;
