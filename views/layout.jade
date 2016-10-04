@@ -80,6 +80,8 @@ html
               .form-group.input-type-2
                 label(for="inputEmail3").col-sm-2.control-label Saat
                 .col-sm-10
+                  input(placeholder="başlangıç 00.00", name="startTime", required, type="string", data-error="Etkinliğin başlangıç saatini giriniz!", value="").form-control
+                  input(placeholder="bitiş 00.00", name="endTime", required, type="string", data-error="Etkinliğin bitiş saatini giriniz!", value="").form-control
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Kişi Sayısı
