@@ -63,6 +63,22 @@ body {
   }
 }
 
+.form-group.input-type-2 {
+  input {
+    width: 50%;
+    float: left;
+    &:first-of-type {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &:last-of-type {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+
 
 footer {
   background-color: #f8f8f8;

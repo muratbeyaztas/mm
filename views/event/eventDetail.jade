@@ -10,8 +10,12 @@ div
         input( type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
     br
     .input-group
-        span.input-group-addon#startDate Başlangıç Zamanı
+        span.input-group-addon#startDate Tarih
         input( type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDateTime }").form-control
+    br
+    .input-group
+        span.input-group-addon#startEndTime Saat
+        input( type="text", placeholder="Saati", aria-describedby="startEndTime", value="#{ model.startTime } - #{ model.endTime }").form-control
     br
     .input-group
         span.input-group-addon#personCount Kişi Sayısı
