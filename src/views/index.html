@@ -2,312 +2,280 @@
 <html lang="en">
 
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta charset="utf-8">
-	<title>Storystrap Template</title>
-	<meta name="generator" content="Bootply" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Storystrap Template</title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/bootstrap-datepicker3.standalone.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-datepicker3.standalone.min.css" rel="stylesheet">
 
-	<link href="lib/bootstrap-calendar/css/calendar.css" rel="stylesheet">
+    <link href="lib/bootstrap-calendar/css/calendar.css" rel="stylesheet">
 
 
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-	<!--[if lt IE 9]>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-	<!-- <link href="css/styles.css" rel="stylesheet"> -->
-	<link href="css/screen.css" rel="stylesheet">
+    <!-- <link href="css/styles.css" rel="stylesheet"> -->
+    <link href="css/screen.css" rel="stylesheet">
 </head>
 
 <body>
 
-		<nav class="navbar navbar-default">
-		  <div class="container">
-		    <div class="navbar-header">
-		      <a class="navbar-brand" href="#">Eren Yatçılık</a>
-		    </div>
-		  </div>
-		</nav>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Eren Yatçılık</a>
+            </div>
+        </div>
+    </nav>
 
 
 
 
-	<div class="container">
+    <div class="container">
 
 
 
-		<div>
+        <div>
 
-			<!-- Nav tabs -->
-			<ul class="nav nav-pills nav-justified" role="tablist">
-				<li role="presentation" class="active"><a href="#calendarYatch" aria-controls="profile" role="tab" data-toggle="tab">Takvim</a></li>
-				<li role="presentation" ><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Kayıt</a></li>
-			</ul>
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills nav-justified" role="tablist">
+                <li role="presentation" class="active"><a href="#calendarYatch" aria-controls="profile" role="tab" data-toggle="tab">Takvim</a></li>
+                <li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Kayıt</a></li>
+            </ul>
 
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="calendarYatch">
-					<div class="page-header">
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="calendarYatch">
+                    <div class="page-header">
 
-						<div class="pull-right form-inline">
-							<div class="btn-group">
-								<button class="btn btn-primary" data-calendar-nav="prev"><< </button>
-										<button class="btn" data-calendar-nav="today">Today</button>
-										<button class="btn btn-primary" data-calendar-nav="next"> >></button>
-							</div>
-							<div class="btn-group">
-								<button class="btn btn-warning" data-calendar-view="year">Year</button>
-								<button class="btn btn-warning active" data-calendar-view="month">Month</button>
-								<button class="btn btn-warning" data-calendar-view="week">Week</button>
-								<button class="btn btn-warning" data-calendar-view="day">Day</button>
-							</div>
-						</div>
+                        <div class="pull-right form-inline">
+                            <div class="btn-group">
+                                <button class="btn btn-primary" data-calendar-nav="prev"><< </button>
+                                <button class="btn" data-calendar-nav="today">Today</button>
+                                <button class="btn btn-primary" data-calendar-nav="next"> >></button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-warning" data-calendar-view="year">Year</button>
+                                <button class="btn btn-warning active" data-calendar-view="month">Month</button>
+                                <button class="btn btn-warning" data-calendar-view="week">Week</button>
+                                <button class="btn btn-warning" data-calendar-view="day">Day</button>
+                            </div>
+                        </div>
 
-						<h3></h3>
-					</div>
-					<div id="calendar"></div>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="register">
-
-<<<<<<< HEAD
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Tekne</label>
-							<div class="col-sm-10">
-								<select class="form-control">
-=======
-					<form class="form-horizontal" method="post" action="saveEvent">
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Tekne</label>
-							<div class="col-sm-10">
-								<select class="form-control" name="bootType">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
+                        <h3></h3>
+                    </div>
+                    <div id="calendar"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="register">
+                    <form class="form-horizontal" method="post" action="saveEvent">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tekne</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="bootType">
 									<option>Seçiniz</option>
 									<option>Eren A</option>
 									<option>Eren B</option>
 								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">subject</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control title-event" >
-=======
-								<input class="form-control title-event" name="eventSubject" >
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group date">
-							<label for="inputEmail3" class="col-sm-2 control-label">Tarih</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control" data-provide="datepicker">
-=======
-								<input class="form-control" data-provide="datepicker" name="startDate">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Saat</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control" placeholder="00:00">
-=======
-								<input class="form-control" placeholder="00:00" name="startTime">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Kişi Sayısı</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control">
-=======
-								<input class="form-control" name="guestCount">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Başlangıç - Bitiş Yeri</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control" style="margin-bottom:3px">
-								<input class="form-control">
-=======
-								<input class="form-control" style="margin-bottom:3px" name="startLocation">
-								<input class="form-control" name="endLocation">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Ödeme</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<input class="form-control" style="width:90%; display:inline-block; margin-right:3px;">
-=======
-								<input class="form-control" style="width:90%; display:inline-block; margin-right:3px;" name="payment">
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-								<label>TL</lebel>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">subject</label>
+                            <div class="col-sm-10">
+                                <input class="form-control title-event" name="eventSubject">
+                            </div>
+                        </div>
+                        <div class="form-group date">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Tarih</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" data-provide="datepicker" name="startDate">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Saat</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" placeholder="00:00" name="startTime">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Kişi Sayısı</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" name="guestCount">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Başlangıç - Bitiş Yeri</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" style="margin-bottom:3px" name="startLocation">
+                                <input class="form-control" name="endLocation">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Ödeme</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" style="width:90%; display:inline-block; margin-right:3px;" name="payment">
+                                <label>TL</lebel>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">Açıklama</label>
-							<div class="col-sm-10">
-<<<<<<< HEAD
-								<textarea class="form-control" rows="5"></textarea>
-=======
-								<textarea class="form-control" rows="5" name="eventDescription"></textarea>
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<div class="checkbox">
-									<label>
-<<<<<<< HEAD
-										<input type="checkbox"> Yemekli
-=======
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5" name="eventDescription"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
 										<input type="checkbox" name="hasMeal"> Yemekli
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
 									</label>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<!-- <button type="submit" class="btn btn-success pull-right event-send" >Tamam</button> -->
-<<<<<<< HEAD
-								<a type="submit" class="btn btn-success pull-right event-send" >Tamam</a>
-=======
-								<input type="submit" class="btn btn-success pull-right event-send" value="Tamam" name="saveEvent" />
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-							</div>
-						</div>
-					</form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <!-- <button type="submit" class="btn btn-success pull-right event-send" >Tamam</button> -->
+                                    <input type="submit" class="btn btn-success pull-right event-send" value="Tamam" name="saveEvent" />
+                                </div>
+                            </div>
+                    </form>
 
-				</div>
+                    </div>
 
 
-			</div>
+                </div>
 
-		</div>
+            </div>
 
 
 
-		<div class="modal fade" id="events-modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 class="modal-title">Event</h3>
-					</div>
-					<div class="modal-body" style="height: 400px">
-					</div>
-					<div class="modal-footer">
-						<a href="#" data-dismiss="modal" class="btn">Close</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="modal fade" id="events-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3 class="modal-title">Event</h3>
+                        </div>
+                        <div class="modal-body" style="height: 400px">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#" data-dismiss="modal" class="btn">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-	<hr>
+        <hr>
 
 
-	<hr>
+        <hr>
 
-	<hr>
+        <hr>
 
-	<footer>
-		<div class="container">
-			<i>Eren Yatçılık</i>
-			<a class="pull-right" href="#">up</a>
-		</div>
-	</footer>
+        <footer>
+            <div class="container">
+                <i>Eren Yatçılık</i>
+                <a class="pull-right" href="#">up</a>
+            </div>
+        </footer>
 
 
-	<!-- script references -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<!-- <script src="js/bootstrap-datepicker.min.js"></script>
+        <!-- script references -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <!-- <script src="js/bootstrap-datepicker.min.js"></script>
 	<script src="js/bootstrap-datepicker.tr.min.js" charset="UTF-8"></script> -->
 
 
-	<script src="lib/jquery/dist/jquery.js"></script>
-	<script src="lib/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="lib/underscore/underscore.js"></script>
-	<script src="lib/moment/moment.js"></script>
+        <script src="lib/jquery/dist/jquery.js"></script>
+        <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="lib/underscore/underscore.js"></script>
+        <script src="lib/moment/moment.js"></script>
 
-	<script src="lib/bootstrap-calendar/js/calendar.js"></script>
-	<script src="lib/bootstrap-calendar/js/app.js"></script>
+        <script src="lib/bootstrap-calendar/js/calendar.js"></script>
+        <script src="lib/bootstrap-calendar/js/app.js"></script>
 
-	<script type="text/javascript">
-		var calendar = $("#calendar").calendar({
-			tmpl_path: "lib/bootstrap-calendar/tmpls/",
-			//events_source: 'lib/bootstrap-calendar/events.json.php'
-			events_source: function() {
-				return [];
-			}
-			modal: "#events-modal",
+        <script type="text/javascript">
+            var calendar = $("#calendar").calendar({
+                tmpl_path: "lib/bootstrap-calendar/tmpls/",
+                //events_source: 'lib/bootstrap-calendar/events.json.php'
+                events_source: function() {
+                    return [];
+                }
+                modal: "#events-modal",
 
-		});
-
-
-		// var calendar = $('#calendar').calendar({
-		// 	tmpl_path: "lib/bootstrap-calendar/tmpls/",
-		// 	day: '2013-03-12',
-		// 	events_source: function(){
-		//     return  [
-		//        {
-		//            "id": 298,
-		//            "title": "Event 1",
-		//            "url": "http://example.com",
-		//            "class": "event-important",
-		//            "start": 1362938400000, // Milliseconds
-		//            "end": 1363197686300 // Milliseconds
-		//        }
-		//    ];
-		// }});
+            });
 
 
-<<<<<<< HEAD
-		var title-val = $('.title-event').val();
+            // var calendar = $('#calendar').calendar({
+            // 	tmpl_path: "lib/bootstrap-calendar/tmpls/",
+            // 	day: '2013-03-12',
+            // 	events_source: function(){
+            //     return  [
+            //        {
+            //            "id": 298,
+            //            "title": "Event 1",
+            //            "url": "http://example.com",
+            //            "class": "event-important",
+            //            "start": 1362938400000, // Milliseconds
+            //            "end": 1363197686300 // Milliseconds
+            //        }
+            //    ];
+            // }});
 
-=======
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
+
+            <<
+            <<
+            <<
+            <
+            HEAD
+            var title - val = $('.title-event').val();
+
+            ===
+            ===
+            = >>>
+            >>>
+            >
+            0135e97 bb086f4005ffe989a7658420ef3dff50d
 
 
-			var calendar = $('#calendar').calendar({
+            var calendar = $('#calendar').calendar({
 
-				tmpl_path: "lib/bootstrap-calendar/tmpls/",
-				day: '2013-03-12',
-				events_source: function(){
-					return  [
-						 {
-								 "id": 298,
-								 "title": title-val,
-								 "url": "http://example.com",
-								 "class": "event-important",
-								 "start": 1362938400000, // Milliseconds
-								 "end": 1363197686300 // Milliseconds
-						 }
-				 ];
-			}});
+                tmpl_path: "lib/bootstrap-calendar/tmpls/",
+                day: '2013-03-12',
+                events_source: function() {
+                    return [{
+                        "id": 298,
+                        "title": title - val,
+                        "url": "http://example.com",
+                        "class": "event-important",
+                        "start": 1362938400000, // Milliseconds
+                        "end": 1363197686300 // Milliseconds
+                    }];
+                }
+            });
 
-<<<<<<< HEAD
-			$('.event-send').click(function(){
-				calendar();
-			});
+            <<
+            <<
+            <<
+            <
+            HEAD
+            $('.event-send').click(function() {
+                calendar();
+            });
 
-=======
->>>>>>> 0135e97bb086f4005ffe989a7658420ef3dff50d
-
-	</script>
+            ===
+            ===
+            = >>>
+            >>>
+            >
+            0135e97 bb086f4005ffe989a7658420ef3dff50d
+        </script>
 
 
 
