@@ -61,8 +61,8 @@ function getEventsByRange(req, res) {
                 title: evnt.subject,
                 url: '/detay/' + evnt._id,
                 class: "event-important",
-                start: new Date(evnt.startDate.getTime() + evnt.startTime * 60 * 60 * 1000).getTime(),
-                end: new Date(evnt.startDate.getTime() + (evnt.startTime + evnt.endTime) * 60 * 60 * 1000).getTime()
+                start: new Date(evnt.startDate.getTime() + evnt.startTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000,
+                end: new Date(evnt.startDate.getTime() + evnt.endTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000
             });
         });
 
