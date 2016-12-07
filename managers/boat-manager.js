@@ -40,6 +40,8 @@ function getBoats(req, res) {
         });
 }
 
+function test() {}
+
 function deleteBoat(req, res) {
 
     var viewmodel = new boatViewModel();
