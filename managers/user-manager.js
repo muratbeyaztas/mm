@@ -1,4 +1,3 @@
-
 var express = require('express'),
     databaseManager = require('./database-manager');
 
@@ -44,16 +43,15 @@ function authenticate(req, res, next) {
     var username = req.body.username,
         password = req.body.password;
 
-    if (req.authenticated && req.authenticated.user) {
+    if (req.authenticated && req.authenticated.user && (!username || username === req.authenticated.user.username)) {
         return next();
     }
-
     if (!username && !password) {
         return res.redirect('/giris');
     }
 
     var users = databaseManager.getUserModel();
-    users.findOne({ username: username.toLowerCase(), password: password }, function (err, result) {
+    users.findOne({ username: username.toLowerCase(), password: password }, function(err, result) {
 
         if (!result) {
             return res.redirect('/giris?mc=0x1');

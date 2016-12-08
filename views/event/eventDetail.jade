@@ -35,11 +35,12 @@ div
         input( type="text", placeholder="Satış", aria-describedby="sell", value="#{ model.sell }").form-control
         input( type="text", placeholder="", aria-describedby="moneyType2", value="#{ model.moneyType2 }").form-control   
     br
-    .input-group.money-type
-        span.input-group-addon#earnestMoney Kapora
-        input( type="text", placeholder="Kapora", aria-describedby="earnestMoney", value="#{ model.earnestMoney }").form-control
-        input( type="text", placeholder="", aria-describedby="moneyType3", value="#{ model.moneyType3 }").form-control        
-    br
+    if user._id == "57aa385ce07b19b347b7d093"
+     .input-group.money-type
+         span.input-group-addon#earnestMoney Kapora
+         input( type="text", placeholder="Kapora", aria-describedby="earnestMoney", value="#{ model.earnestMoney }").form-control
+         input( type="text", placeholder="", aria-describedby="moneyType3", value="#{ model.moneyType3 }").form-control        
+     br
     .input-group
         span.input-group-addon#description Açıklama
         input( type="text", placeholder="Açıklama", aria-describedby="description", value="#{ model.description }").form-control

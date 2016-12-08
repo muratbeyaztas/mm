@@ -36,7 +36,7 @@ function getEventDetail(req, res) {
             doc.boatName = boat.name;
             console.log(doc.startDateTime);
             doc.startDateTime = doc.startDateTime.split(/ /g)[0];
-            res.render(eventDetailPageName, { model: doc });
+            res.render(eventDetailPageName, { model: doc, user: req.authenticated.user });
         });
     });
 }
