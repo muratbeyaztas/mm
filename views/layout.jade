@@ -70,7 +70,7 @@ html
               .form-group
                 label.col-sm-2.control-label Başlık
                 .col-sm-10
-                  input(name="eventSubject", required data-error="Etkinliğe ait bir başlık girmediniz!", value="Düğün Töreni").form-control.title-event
+                  input(name="eventSubject", required data-error="Etkinliğe ait bir başlık girmediniz!", value="").form-control.title-event
                   div.help-block.with-errors
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Tarih
@@ -86,18 +86,18 @@ html
               .form-group
                 label(for="inputEmail3").col-sm-2.control-label Kişi Sayısı
                 .col-sm-10
-                  input(name="guestCount", required, type="number", data-error="Etkinliği katılacak kişi sayısını giriniz!", value="150").form-control
+                  input(name="guestCount", required, type="number", data-error="Etkinliği katılacak kişi sayısını giriniz!", value="").form-control
                   div.help-block.with-errors
               .form-group.input-type-2
                 label(for="inputEmail3").col-sm-2.control-label Başlangıç - Bitiş Yeri
                 .col-sm-10
-                  input(name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="KARAKÖY").form-control
-                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="KADIKÖY").form-control
+                  input(name="startLocation", required, data-error="Başlangıç yerini giriniz!", value="").form-control
+                  input(name="endLocation", required, data-error="Bitiş yerini giriniz!", value="").form-control
                   div.help-block.with-errors
               .form-group.money-type
                 label(for="inputEmail3").col-sm-2.control-label Ödeme
                 .col-sm-10
-                  input( name="payment", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
+                  input( name="payment", required, type="number", data-error="Ödeme miktarını giriniz!", value="").form-control
                   //label TL
                   select(name="moneyType1", required).form-control
                     option TL
@@ -107,7 +107,7 @@ html
               .form-group.money-type
                 label(for="inputEmail3").col-sm-2.control-label Satış
                 .col-sm-10
-                  input( name="sale", required, type="number", data-error="Ödeme miktarını giriniz!", value="1250").form-control
+                  input( name="sale", required, type="number", data-error="Ödeme miktarını giriniz!", value="").form-control
                   //label TL
                   select(name="moneyType2", required).form-control
                     option TL
@@ -117,7 +117,7 @@ html
               .form-group.money-type
                 label(for="inputEmail3").col-sm-2.control-label kapora
                 .col-sm-10
-                  input( name="earnestMoney", required, type="number", data-error="Kapora miktarını giriniz!", value="250").form-control
+                  input( name="earnestMoney", required, type="number", data-error="Kapora miktarını giriniz!", value="").form-control
                   //label TL
                   select(name="moneyType3", required).form-control
                     option TL
@@ -127,13 +127,13 @@ html
               .form-group
                   label.col-sm-2.ontrol-label Açıklama
                   div.col-sm-10
-                    textarea(rows="5", name="eventDescription", required, data-error="Etkinlik açıklamasını giriniz!").form-control Yemekli düğün töreni
+                    textarea(rows="5", name="eventDescription", required, data-error="Etkinlik açıklamasını giriniz!").form-control 
                     div.help-block.with-errors
               .form-group
                 div.col-sm-offset-2.col-sm-10
                   .checkbox
                     label
-                      input(type="checkbox", name="hasMeal",checked="checked")
+                      input(type="checkbox", name="hasMeal")
                       |Yemekli
                       div.help-block.with-errors
               .form-group
@@ -148,8 +148,8 @@ html
                 h4().modal-title#myModalLabel Modal title
               .modal-body
               .modal-footer
-                button(type="button", data-dismiss="modal").btn.btn-default Close
-                button(type="button", data-dismiss="modal").btn.btn-primary Save changes
+                button(type="button", data-dismiss="modal").btn.btn-default Kapat
+                a(type="button").btn.btn-danger.pull-left(href="/sil") Sil
 
       //- #events-modal.modal.hide.fade
       //-   .modal-header
