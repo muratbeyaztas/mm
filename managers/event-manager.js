@@ -23,6 +23,21 @@ router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
 router.use('/', getEvents);
+router.get('/sil', deneme);
+
+function deneme(req, res) {
+    res.document.write('çaloışıyor');
+}
+
+function deleteEvent(req, res) {
+    var eventId = req.params.id;
+    var evnts = databaseManager.getEventModel();
+    evnts.remove({"_id": new mongoose.Types.ObjectId(eventId)}, function(err, result){
+        alert("event başarıyla silindi");
+        res.redirect("/etkinlik", {});
+    })
+
+}
 
 function getEventDetail(req, res) {
 
