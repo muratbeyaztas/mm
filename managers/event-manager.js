@@ -41,12 +41,14 @@ function getEventDetail(req, res) {
     var evnts = databaseManager.getEventModel();
     evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function (err, doc) {
 
-        doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
+        // doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
+        doc.startDateTime = dateFormat(doc.startDate.setTime(doc.startDate.getTime() + 1 * 86400000), 'dd-mm-yyyy HH:MM:ss').toString();
+        console.log(doc.startDateTime);
+        doc.startDateTime = doc.startDateTime.split(/ /g)[0];
+
         var boats = databaseManager.getBoatModel();
         boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function (err, boat) {
             doc.boatName = boat.name;
-            console.log(doc.startDateTime);
-            doc.startDateTime = doc.startDateTime.split(/ /g)[0];
             res.render(eventDetailPageName, { model: doc, user: req.authenticated.user });
         });
     });
