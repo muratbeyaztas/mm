@@ -22,39 +22,35 @@ function eventViewModel(boats) {
 router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
+router.get('/sil/:id', deleteEvent);
 router.use('/', getEvents);
-router.get('/sil', deneme);
 
-function deneme(req, res) {
-    res.document.write('çaloışıyor');
-}
+
 
 function deleteEvent(req, res) {
     var eventId = req.params.id;
     var evnts = databaseManager.getEventModel();
-    evnts.remove({"_id": new mongoose.Types.ObjectId(eventId)}, function(err, result){
-        alert("event başarıyla silindi");
-        res.redirect("/etkinlik", {});
-    })
-
-}
+    evnts.remove({ "_id": new mongoose.Types.ObjectId(eventId) }, function (err, result) {
+        res.redirect("/etkinlik");
+    });
+};
 
 function getEventDetail(req, res) {
 
     var eventid = req.params.id;
     var evnts = databaseManager.getEventModel();
-    evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function(err, doc) {
+    evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function (err, doc) {
 
         doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
         var boats = databaseManager.getBoatModel();
-        boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function(err, boat) {
+        boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function (err, boat) {
             doc.boatName = boat.name;
             console.log(doc.startDateTime);
             doc.startDateTime = doc.startDateTime.split(/ /g)[0];
             res.render(eventDetailPageName, { model: doc, user: req.authenticated.user });
         });
     });
-}
+};
 
 function getEventsByRange(req, res) {
 
@@ -67,9 +63,9 @@ function getEventsByRange(req, res) {
     calenderEvents.success = 0;
 
     var evnts = databaseManager.getEventModel();
-    evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function(err, results) {
+    evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function (err, results) {
 
-        results.forEach(function(evnt) {
+        results.forEach(function (evnt) {
 
             calenderEvents.result.push({
                 id: evnt._id.toString(),
@@ -90,10 +86,10 @@ function getEvents(req, res) {
 
     var viewmodel = new eventViewModel();
     var boats = databaseManager.getBoatModel();
-    boats.find({}, function(err, boats) {
+    boats.find({}, function (err, boats) {
 
         viewmodel.boats = boats;
-        return res.render(layoutPageName, { model: viewmodel });
+        return res.render(layoutPageName, { model: viewmodel, user: req.authenticated.user });
     });
 }
 
@@ -117,7 +113,7 @@ function saveEvent(req, res) {
     newEvent.moneyType2 = req.body.moneyType2;
     newEvent.moneyType3 = req.body.moneyType3;
     newEvent.hasDinner = req.body.hasMeal === 'on';
-    newEvent.save(function(err, evnt) {
+    newEvent.save(function (err, evnt) {
         res.redirect("/");
     });
 }

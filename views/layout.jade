@@ -140,7 +140,7 @@ html
                 div.col-sm-offset-2.col-sm-10
                   input(type="submit", value="Tamam", name="saveEvent").btn.btn-success.pull-right.event-send
 
-          div(tabindex="1", role="dialog", aria-labelledby="myModalLabel").modal.fade#events-modal
+          div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade#events-modal
             .modal-dialog(role="document")
               .modal-header
                 button(type="button", data-dismiss="modal", aria-label="Close").close
@@ -149,7 +149,8 @@ html
               .modal-body
               .modal-footer
                 button(type="button", data-dismiss="modal").btn.btn-default Kapat
-                a(type="button").btn.btn-danger.pull-left(href="/sil") Sil
+                if user.authorisation == true
+                  a.btn.btn-danger.pull-left(href="/sil")#eventSilBtn Sil
 
       //- #events-modal.modal.hide.fade
       //-   .modal-header
@@ -179,3 +180,9 @@ html
     script(src="lib/bootstrap-calendar/js/app.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js")
     script(src="scripts/toastrJs.js")
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+
+    //- script(src="/scripts/eventJs.js")
+    //- script.
+    //-   eventJs.init();
+    

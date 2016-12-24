@@ -1,6 +1,6 @@
 
 
-div
+div.eventContainer(data-id="#{model._id}")
     .input-group
         span.input-group-addon#bootType Tekne Adı
         input( type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
@@ -49,3 +49,18 @@ div
     .input-group
         span.input-group-addon#hasMeail Yemekli mi?
         input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasDinner ? 'evet' : 'hayır' }").form-control
+
+    //- .modal-footer
+    //-     button(type="button", data-dismiss="modal").btn.btn-default Kapat
+    //-     if user.authorisation == true
+    //-         a.btn.btn-danger.pull-left(href="/sil")#eventSilBtn Sil
+
+    script.
+      $(function(){
+        $('#events-modal').on('shown.bs.modal', function () {
+            var eventId = $(".eventContainer").data("id");
+            if (eventId) {
+                $("#eventSilBtn").attr("href", "/sil/" + eventId);
+            }
+        });
+       });
