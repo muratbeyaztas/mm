@@ -44,7 +44,7 @@ div.eventContainer(data-id="#{model._id}")
      br
     .input-group
         span.input-group-addon#description Açıklama
-        input( type="text", placeholder="Açıklama", aria-describedby="description", value="#{ model.description }").form-control
+        textarea(rows="2" aria-describedby="description").form-control #{ model.description }
     br
     .input-group
         span.input-group-addon#hasMeail Yemekli mi?
