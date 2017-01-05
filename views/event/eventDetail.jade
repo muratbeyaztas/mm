@@ -54,6 +54,7 @@ div.eventContainer(data-id="#{model._id}")
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
         if user.authorisation == true
             a.btn.btn-danger.pull-left(href="/sil")#eventSilBtn Sil
+            a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
 
     script.
       $(function(){

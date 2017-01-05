@@ -19,13 +19,26 @@ function eventViewModel(boats) {
     this.boats = boats || [];
 }
 
+
+//event/save  kaydet
+//event/delete  sıl
+//event/list eventler
+//event/update 
+//event/get  detay
 router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
 router.get('/sil/:id', deleteEvent);
+router.get('/event/update/:id', eventUpdate);
 router.use('/', getEvents);
 
-
+function eventUpdate (req, res) {
+    var eventId = req.params.id;
+    var evnts = databaseManager.getEventModel();
+    evnts.update({ "_id": new mongoose.Types.ObjectId(eventId) }, function (err, result) {
+        res.redirect("/etkinlik");
+    });
+}
 
 function deleteEvent(req, res) {
     var eventId = req.params.id;
