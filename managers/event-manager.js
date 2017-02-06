@@ -29,15 +29,64 @@ router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
 router.get('/sil/:id', deleteEvent);
-router.get('/event/update/:id', eventUpdate);
+router.post('/event/update/:id', eventUpdate);
 router.use('/', getEvents);
 
 function eventUpdate (req, res) {
-    var eventId = req.params.id;
-    var evnts = databaseManager.getEventModel();
-    evnts.update({ "_id": new mongoose.Types.ObjectId(eventId) }, function (err, result) {
-        res.redirect("/etkinlik");
+    var eventId = req.params.id;    
+    var eventModel = databaseManager.getEventModel();
+    //eventModel.subject = req.body.subject;
+    var subject2 = req.body.subject;
+    var boatId2 = req.body.boatName;
+    // console.log(subject + " " + eventId);
+    // res.end(subject);
+
+    // var eventModel = databaseManager.getEventModel();
+    // var newEvent = new eventModel();
+    // newEvent.boatId = req.body.boatName;
+    // newEvent.subject = req.body.subject;
+    // newEvent.description = req.body.description;
+    // newEvent.startDate = new Date(req.body.startDateTime);
+    // newEvent.startTime = req.body.startTime;
+    // newEvent.endTime = req.body.endTime;
+    // newEvent.personCount = req.body.personCount;
+    // newEvent.startLocation = req.body.startLocation;
+    // newEvent.endLocation = req.body.endLocation;
+    // newEvent.fee = req.body.fee;
+    // newEvent.sell = req.body.sell;
+    // newEvent.earnestMoney = req.body.earnestMoney;
+    // newEvent.moneyType1 = req.body.moneyType1;
+    // newEvent.moneyType2 = req.body.moneyType2;
+    // newEvent.moneyType3 = req.body.moneyType3;
+    // newEvent.hasDinner = req.body.hasDinner === 'on';
+
+    eventModel.update({"_id": new mongoose.Types.ObjectId(eventId)}, {$set:{
+        subject : subject2,
+        boatId : boatId2
+    }}, function (err, evnt) {
+        res.redirect("/");
     });
+    
+    // evnts.update({ "_id": new mongoose.Types.ObjectId(eventId) },{$set: {
+    //     boatId : req.body.boatName,
+    //     subject : req.body.subject,
+    //     description : req.body.description,
+    //     startDate : new Date(req.body.startDateTime),
+    //     startTime : req.body.startTime,
+    //     endTime : req.body.endTime,
+    //     personCount : req.body.personCount,
+    //     startLocation : req.body.startLocation,
+    //     endLocation : req.body.endLocation,
+    //     fee : req.body.fee,
+    //     sell : req.body.sell,
+    //     earnestMoney : req.body.earnestMoney,
+    //     moneyType1 : req.body.moneyType1,
+    //     moneyType2 : req.body.moneyType2,
+    //     moneyType3 : req.body.moneyType3,
+    //     hasDinner : req.body.hasDinner === 'on'
+    // }}, function (err, result) {
+    //     res.redirect("/etkinlik");
+    // });
 }
 
 function deleteEvent(req, res) {
@@ -107,6 +156,10 @@ function getEvents(req, res) {
         return res.render(layoutPageName, { model: viewmodel/*, user: req.authenticated.user*/ });
     });
 }
+
+
+
+
 
 function saveEvent(req, res) {
 

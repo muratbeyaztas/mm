@@ -3,11 +3,11 @@
 div.eventContainer(data-id="#{model._id}")
     .input-group
         span.input-group-addon#bootType Tekne Adı
-        input( type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
+        input( id="boatName" type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
     br
     .input-group
         span.input-group-addon#subject Konu
-        input( type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
+        input( id="subject" type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
     br
     .input-group
         span.input-group-addon#startDate Tarih
@@ -64,4 +64,23 @@ div.eventContainer(data-id="#{model._id}")
                 $("#eventSilBtn").attr("href", "/sil/" + eventId);
             }
         });
+            $("#eventUpdate").click(function(event){
+                event.preventDefault();
+                var eventId = $(".eventContainer").data("id");
+                var vSubject = $("#subject").val();
+                var vBoatName = $("#boatName").val();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/event/update/'+eventId,
+                    data: {
+                        subject : vSubject,
+                        boatId : vBoatName
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    }
+                })
+            })
+        
        });
