@@ -2,8 +2,12 @@
 
 form.eventContainer(data-id="#{model._id}")
     .input-group
-        span.input-group-addon#bootType Tekne Adı
-        input( name="boatName" id="boatName" boatId="#{model.boatId.toString()}" type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
+        select#selectedBoat.form-control
+            for boat in boats
+                if boat._id.toString() == model.boatId.toString()
+                    option( value="#{boat._id.toString()}" selected="selected" ) #{boat.name}
+                else
+                    option( value="#{boat._id.toString()}") #{boat.name}
     br
     .input-group
         span.input-group-addon Konu

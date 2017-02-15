@@ -1,7 +1,8 @@
 var express = require('express'),
     dateFormat = require('dateformat'),
     databaseManager = require('./database-manager'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    moment = require("moment");
 
 
 var eventCollectionName = "events",
@@ -35,12 +36,12 @@ router.use('/', getEvents);
 function eventUpdate(req, res) {
 
     var eventModel = databaseManager.getEventModel();
-    eventModel.findById(req.body.id, function (err, etkinlik) {
+    eventModel.findById(req.body.id, function(err, etkinlik) {
 
-        etkinlik.boatId = req.body.boatName;
+        etkinlik.boatId = req.body.boatId;
         etkinlik.subject = req.body.subject;
         etkinlik.description = req.body.description;
-        etkinlik.startDate = new Date(req.body.startDateTime);
+        etkinlik.startDate = new Date(moment(req.body.startDate, "DD-MM-YYYY").format("YYYY-MM-DD"));
         etkinlik.startTime = req.body.startTime;
         etkinlik.endTime = req.body.endTime;
         etkinlik.personCount = req.body.personCount;
@@ -54,9 +55,10 @@ function eventUpdate(req, res) {
         etkinlik.moneyType3 = req.body.moneyType3;
         etkinlik.hasDinner = req.body.hasDinner === 'evet';
 
-        etkinlik.save(function (err, updatedEtkinlik) {
+        etkinlik.save(function(err, updatedEtkinlik) {
 
-            res.render(eventDetailPageName, { model: updatedEtkinlik, user: req.authenticated.user });
+            res.send("ok");
+            // res.render(eventDetailPageName, { model: updatedEtkinlik, user: req.authenticated.user });
         });
     });
 }
@@ -64,7 +66,7 @@ function eventUpdate(req, res) {
 function deleteEvent(req, res) {
     var eventId = req.params.id;
     var evnts = databaseManager.getEventModel();
-    evnts.remove({ "_id": new mongoose.Types.ObjectId(eventId) }, function (err, result) {
+    evnts.remove({ "_id": new mongoose.Types.ObjectId(eventId) }, function(err, result) {
         res.redirect("/etkinlik");
     });
 };
@@ -73,7 +75,7 @@ function getEventDetail(req, res) {
 
     var eventid = req.params.id;
     var evnts = databaseManager.getEventModel();
-    evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function (err, doc) {
+    evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function(err, doc) {
 
         doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
         //doc.startDateTime = dateFormat(doc.startDate.setTime(doc.startDate.getTime() + 1 * 86400000), 'dd-mm-yyyy HH:MM:ss').toString();
@@ -81,10 +83,13 @@ function getEventDetail(req, res) {
         doc.startDateTime = doc.startDateTime.split(/ /g)[0];
 
         var boats = databaseManager.getBoatModel();
-        boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function (err, boat) {
-            doc.boatName = boat.name;
-            res.render(eventDetailPageName, { model: doc, user: req.authenticated.user });
+        boats.find({}).exec(function(err, results) {
+            res.render(eventDetailPageName, { model: doc, boats: results, user: req.authenticated.user });
         });
+        // boats.findOne({ _id: new mongoose.Types.ObjectId(doc.boatId) }, function(err, boat) {
+        //     doc.boatName = boat.name;
+        //     res.render(eventDetailPageName, { model: doc, user: req.authenticated.user });
+        // });
     });
 };
 
@@ -99,9 +104,9 @@ function getEventsByRange(req, res) {
     calenderEvents.success = 0;
 
     var evnts = databaseManager.getEventModel();
-    evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function (err, results) {
+    evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function(err, results) {
 
-        results.forEach(function (evnt) {
+        results.forEach(function(evnt) {
 
             calenderEvents.result.push({
                 id: evnt._id.toString(),
@@ -122,10 +127,10 @@ function getEvents(req, res) {
 
     var viewmodel = new eventViewModel();
     var boats = databaseManager.getBoatModel();
-    boats.find({}, function (err, boats) {
+    boats.find({}, function(err, boats) {
 
         viewmodel.boats = boats;
-        return res.render(layoutPageName, { model: viewmodel/*, user: req.authenticated.user*/ });
+        return res.render(layoutPageName, { model: viewmodel /*, user: req.authenticated.user*/ });
     });
 }
 
@@ -153,7 +158,7 @@ function saveEvent(req, res) {
     newEvent.moneyType2 = req.body.moneyType2;
     newEvent.moneyType3 = req.body.moneyType3;
     newEvent.hasDinner = req.body.hasMeal === 'on';
-    newEvent.save(function (err, evnt) {
+    newEvent.save(function(err, evnt) {
         res.redirect("/");
     });
 }
