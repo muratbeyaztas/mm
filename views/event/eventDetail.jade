@@ -1,86 +1,59 @@
 
 
-div.eventContainer(data-id="#{model._id}")
+form.eventContainer(data-id="#{model._id}")
     .input-group
         span.input-group-addon#bootType Tekne Adı
-        input( id="boatName" type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
+        input( name="boatName" id="boatName" boatId="#{model.boatId.toString()}" type="text", placeholder="Tekne Adı", aria-describedby="bootType", value="#{ model.boatName }").form-control
     br
     .input-group
-        span.input-group-addon#subject Konu
-        input( id="subject" type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
+        span.input-group-addon Konu
+        input( name="subject" id="subject" type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
     br
     .input-group
         span.input-group-addon#startDate Tarih
-        input( type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDateTime }").form-control
+        input( name="startDateTime" id="startDateTime"  type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDateTime }").form-control
     br
     .input-group
         span.input-group-addon#startEndTime Saat
-        input( type="text", placeholder="Saati", aria-describedby="startEndTime", value="#{ model.startTime } - #{ model.endTime }").form-control
+        input( name="startTime" id="startTime"  type="text", placeholder="Saati", aria-describedby="startEndTime", value="#{ model.startTime } - #{ model.endTime }").form-control
     br
     .input-group
-        span.input-group-addon#personCount Kişi Sayısı
-        input( type="text", placeholder="Kişi Sayısı", aria-describedby="personCount", value="#{ model.personCount }").form-control
+        span.input-group-addon Kişi Sayısı
+        input( name="personCount" id="personCount" type="text", placeholder="Kişi Sayısı", aria-describedby="personCount", value="#{ model.personCount }").form-control
     br
     .input-group
         span.input-group-addon#startEndLocation Başlangıç - Bitiş Noktası
-        input( type="text", placeholder="Başlangıç - Bitiş Noktası", aria-describedby="startEndLocation", value="#{ model.startLocation } - #{ model.endLocation }").form-control
+        input( name="startLocation" id="startLocation" type="text", placeholder="Başlangıç - Bitiş Noktası", aria-describedby="startEndLocation", value="#{ model.startLocation } - #{ model.endLocation }").form-control
     br
     .input-group.money-type
         span.input-group-addon#payment Ödeme
-        input( type="text", placeholder="Ödeme", aria-describedby="payment", value="#{ model.fee }").form-control
-        input( type="text", placeholder="", aria-describedby="moneyType1", value="#{ model.moneyType1 }").form-control    
+        input( name="fee" id="fee" type="text", placeholder="Ödeme", aria-describedby="payment", value="#{ model.fee }").form-control
+        input( name="moneyType1" id="moneyType1" type="text", placeholder="", aria-describedby="moneyType1", value="#{ model.moneyType1 }").form-control    
     br
     if user.authorisation == true
      .input-group.money-type
-         span.input-group-addon#sell Satış
-         input( type="text", placeholder="Satış", aria-describedby="sell", value="#{ model.sell }").form-control
-         input( type="text", placeholder="", aria-describedby="moneyType2", value="#{ model.moneyType2 }").form-control   
+         span.input-group-addon Satış
+         input( name="sell" id="sell" type="text", placeholder="Satış", aria-describedby="sell", value="#{ model.sell }").form-control
+         input( name="moneyType2" id="moneyType2" type="text", placeholder="", aria-describedby="moneyType2", value="#{ model.moneyType2 }").form-control   
      br
     if user.authorisation == true
      .input-group.money-type
-         span.input-group-addon#earnestMoney Kapora
-         input( type="text", placeholder="Kapora", aria-describedby="earnestMoney", value="#{ model.earnestMoney }").form-control
-         input( type="text", placeholder="", aria-describedby="moneyType3", value="#{ model.moneyType3 }").form-control        
+         span.input-group-addon Kapora
+         input( name="earnestMoney" id="earnestMoney" type="text", placeholder="Kapora", aria-describedby="earnestMoney", value="#{ model.earnestMoney }").form-control
+         input( name="moneyType3" id="moneyType3" type="text", placeholder="", aria-describedby="moneyType3", value="#{ model.moneyType3 }").form-control        
      br
     .input-group
-        span.input-group-addon#description Açıklama
-        textarea(rows="2" aria-describedby="description").form-control #{ model.description }
+        span.input-group-addon Açıklama
+        textarea(name="description" id="description" rows="2" aria-describedby="description").form-control #{ model.description }
     br
     .input-group
         span.input-group-addon#hasMeail Yemekli mi?
-        input( type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasDinner ? 'evet' : 'hayır' }").form-control
+        input( name="hasDinner" id="hasDinner" type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasDinner ? 'evet' : 'hayır' }").form-control
 
     .modal-footer
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
         if user.authorisation == true
-            a.btn.btn-danger.pull-left(href="/sil")#eventSilBtn Sil
-            a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
-
-    script.
-      $(function(){
-        $('#events-modal').on('shown.bs.modal', function () {
-            var eventId = $(".eventContainer").data("id");
-            if (eventId) {
-                $("#eventSilBtn").attr("href", "/sil/" + eventId);
-            }
-        });
-            $("#eventUpdate").click(function(event){
-                event.preventDefault();
-                var eventId = $(".eventContainer").data("id");
-                var vSubject = $("#subject").val();
-                var vBoatName = $("#boatName").val();
-                
-                $.ajax({
-                    type: 'POST',
-                    url: '/event/update/'+eventId,
-                    data: {
-                        subject : vSubject,
-                        boatId : vBoatName
-                    },
-                    success: function(data) {
-                        console.log(data);
-                    }
-                })
-            })
-        
-       });
+            a.btn.btn-danger.pull-left(href="/sil/#{model._id}")#eventSilBtn Sil
+            //a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
+            button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
+    

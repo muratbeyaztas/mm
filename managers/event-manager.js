@@ -29,64 +29,36 @@ router.post('/kaydet', saveEvent);
 router.get('/eventler', getEventsByRange);
 router.get('/detay/:id', getEventDetail);
 router.get('/sil/:id', deleteEvent);
-router.post('/event/update/:id', eventUpdate);
+router.post('/update/', eventUpdate);
 router.use('/', getEvents);
 
-function eventUpdate (req, res) {
-    var eventId = req.params.id;    
+function eventUpdate(req, res) {
+
     var eventModel = databaseManager.getEventModel();
-    //eventModel.subject = req.body.subject;
-    var subject2 = req.body.subject;
-    var boatId2 = req.body.boatName;
-    // console.log(subject + " " + eventId);
-    // res.end(subject);
+    eventModel.findById(req.body.id, function (err, etkinlik) {
 
-    // var eventModel = databaseManager.getEventModel();
-    // var newEvent = new eventModel();
-    // newEvent.boatId = req.body.boatName;
-    // newEvent.subject = req.body.subject;
-    // newEvent.description = req.body.description;
-    // newEvent.startDate = new Date(req.body.startDateTime);
-    // newEvent.startTime = req.body.startTime;
-    // newEvent.endTime = req.body.endTime;
-    // newEvent.personCount = req.body.personCount;
-    // newEvent.startLocation = req.body.startLocation;
-    // newEvent.endLocation = req.body.endLocation;
-    // newEvent.fee = req.body.fee;
-    // newEvent.sell = req.body.sell;
-    // newEvent.earnestMoney = req.body.earnestMoney;
-    // newEvent.moneyType1 = req.body.moneyType1;
-    // newEvent.moneyType2 = req.body.moneyType2;
-    // newEvent.moneyType3 = req.body.moneyType3;
-    // newEvent.hasDinner = req.body.hasDinner === 'on';
+        etkinlik.boatId = req.body.boatName;
+        etkinlik.subject = req.body.subject;
+        etkinlik.description = req.body.description;
+        etkinlik.startDate = new Date(req.body.startDateTime);
+        etkinlik.startTime = req.body.startTime;
+        etkinlik.endTime = req.body.endTime;
+        etkinlik.personCount = req.body.personCount;
+        etkinlik.startLocation = req.body.startLocation;
+        etkinlik.endLocation = req.body.endLocation;
+        etkinlik.fee = req.body.fee;
+        etkinlik.sell = req.body.sell;
+        etkinlik.earnestMoney = req.body.earnestMoney;
+        etkinlik.moneyType1 = req.body.moneyType1;
+        etkinlik.moneyType2 = req.body.moneyType2;
+        etkinlik.moneyType3 = req.body.moneyType3;
+        etkinlik.hasDinner = req.body.hasDinner === 'evet';
 
-    eventModel.update({"_id": new mongoose.Types.ObjectId(eventId)}, {$set:{
-        subject : subject2,
-        boatId : boatId2
-    }}, function (err, evnt) {
-        res.redirect("/");
+        etkinlik.save(function (err, updatedEtkinlik) {
+
+            res.render(eventDetailPageName, { model: updatedEtkinlik, user: req.authenticated.user });
+        });
     });
-    
-    // evnts.update({ "_id": new mongoose.Types.ObjectId(eventId) },{$set: {
-    //     boatId : req.body.boatName,
-    //     subject : req.body.subject,
-    //     description : req.body.description,
-    //     startDate : new Date(req.body.startDateTime),
-    //     startTime : req.body.startTime,
-    //     endTime : req.body.endTime,
-    //     personCount : req.body.personCount,
-    //     startLocation : req.body.startLocation,
-    //     endLocation : req.body.endLocation,
-    //     fee : req.body.fee,
-    //     sell : req.body.sell,
-    //     earnestMoney : req.body.earnestMoney,
-    //     moneyType1 : req.body.moneyType1,
-    //     moneyType2 : req.body.moneyType2,
-    //     moneyType3 : req.body.moneyType3,
-    //     hasDinner : req.body.hasDinner === 'on'
-    // }}, function (err, result) {
-    //     res.redirect("/etkinlik");
-    // });
 }
 
 function deleteEvent(req, res) {

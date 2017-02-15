@@ -30,8 +30,9 @@ html
 
     nav.navbar.navbar-default
       .container
-        .navbar-header
+        .navbar-header(style='width:100%')
           a(href="#").navbar-brand Eren Yatçılık
+          button.btn.btn-default.pull-right#logout(style='margin-top: 7px;') Çıkış
 
     .container
       div
@@ -182,7 +183,7 @@ html
     script(src="scripts/toastrJs.js")
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
 
-    //- script(src="/scripts/eventJs.js")
-    //- script.
-    //-   eventJs.init();
+    script(src="scripts/eventJs.js")
+    script.
+      eventJs.init();
     
