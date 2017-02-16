@@ -41,7 +41,7 @@ var eventJs = (function () {
             data: event,
             success: function (response) {
                 toastr.success("Event başarıyla güncellendi.", "BAŞARILI!");
-                shuldRefreshPage(event);
+                shuldRefreshPage();
             },
             error: function () {
                 toastr.error("Event güncellenirken server tarafında hata alındı.", "HATA!");
@@ -55,14 +55,17 @@ var eventJs = (function () {
 
 
     function shuldRefreshPage() {
-        if(currentValues.startDate !== $("#startDateTime").val()){
+        var newDatetime = $("#startDateTime").val();
+        var newSubject = $("#subject").val();
+        if(currentValues.startDate !== newDatetime || currentValues.subject !== newSubject ){
             window.location.reload();
-        }
+        }        
     }
 
     var currentValues = {};
     function getCurrentValues() {
         currentValues.startDate = $("#startDateTime").val();
+        currentValues.subject = $("#subject").val();
     }
 
     return {
