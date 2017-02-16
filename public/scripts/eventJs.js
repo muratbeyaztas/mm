@@ -1,4 +1,4 @@
-var eventJs = (function () {
+var eventJs = (function() {
 
     function init() {
         bindEvents();
@@ -8,10 +8,6 @@ var eventJs = (function () {
 
         $('body').on('shown.bs.modal', onModalOpen);
         $('body').on("click", "#eventUpdate", updateEvent);
-    }
-
-    function onModalOpen(){
-        getCurrentValues();
     }
 
     function updateEvent() {
@@ -39,14 +35,14 @@ var eventJs = (function () {
             url: '/update',
             method: 'post',
             data: event,
-            success: function (response) {
+            success: function(response) {
                 toastr.success("Event başarıyla güncellendi.", "BAŞARILI!");
                 shuldRefreshPage();
             },
-            error: function () {
+            error: function() {
                 toastr.error("Event güncellenirken server tarafında hata alındı.", "HATA!");
             },
-            complete: function () { }
+            complete: function() {}
 
         });
 
@@ -54,15 +50,20 @@ var eventJs = (function () {
     }
 
 
+    function onModalOpen() {
+        getCurrentValues();
+    }
+
     function shuldRefreshPage() {
         var newDatetime = $("#startDateTime").val();
         var newSubject = $("#subject").val();
-        if(currentValues.startDate !== newDatetime || currentValues.subject !== newSubject ){
+        if (currentValues.startDate !== newDatetime || currentValues.subject !== newSubject) {
             window.location.reload();
-        }        
+        }
     }
 
     var currentValues = {};
+
     function getCurrentValues() {
         currentValues.startDate = $("#startDateTime").val();
         currentValues.subject = $("#subject").val();
