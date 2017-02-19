@@ -43,7 +43,9 @@ function authenticate(req, res, next) {
     var username = req.body.username,
         password = req.body.password;
 
-    if (req.authenticated && req.authenticated.user && (!username || username === req.authenticated.user.username)) {
+    if (req.authenticated &&
+        req.authenticated.user &&
+        (!username || username === req.authenticated.user.username)) {
         return next();
     }
     if (!username && !password) {

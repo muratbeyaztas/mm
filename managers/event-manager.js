@@ -41,9 +41,8 @@ function eventUpdate(req, res) {
         etkinlik.boatId = req.body.boatId;
         etkinlik.subject = req.body.subject;
         etkinlik.description = req.body.description;
-        etkinlik.startDate = new Date(moment(req.body.startDate, "DD-MM-YYYY").format("YYYY-MM-DD"));
-        etkinlik.startTime = req.body.startTime;
-        etkinlik.endTime = req.body.endTime;
+        etkinlik.startDate = req.body.startDate;
+        etkinlik.endDate = req.body.endDate;
         etkinlik.personCount = req.body.personCount;
         etkinlik.startLocation = req.body.startLocation;
         etkinlik.endLocation = req.body.endLocation;
@@ -77,11 +76,6 @@ function getEventDetail(req, res) {
     var evnts = databaseManager.getEventModel();
     evnts.findOne({ _id: new mongoose.Types.ObjectId(eventid) }, function(err, doc) {
 
-        doc.startDateTime = dateFormat(doc.startDate, 'dd-mm-yyyy HH:MM:ss').toString();
-        //doc.startDateTime = dateFormat(doc.startDate.setTime(doc.startDate.getTime() + 1 * 86400000), 'dd-mm-yyyy HH:MM:ss').toString();
-        console.log(doc.startDateTime);
-        doc.startDateTime = doc.startDateTime.split(/ /g)[0];
-
         var boats = databaseManager.getBoatModel();
         boats.find({}).exec(function(err, results) {
             res.render(eventDetailPageName, { model: doc, boats: results, user: req.authenticated.user });
@@ -96,31 +90,36 @@ function getEventDetail(req, res) {
 function getEventsByRange(req, res) {
 
     var calenderEvents = new getEventsViewModel();
-    var frm = req.query.from,
-        to = req.query.to;
+    var frm = new Date(parseInt(req.query.from)),
+        to = new Date(parseInt(req.query.to));
 
-    frm = new Date(parseInt(frm));
-    to = new Date(parseInt(to));
+    frm = new Date(moment(frm).format("YYYY-MM-DDT00:00"));
+    to = new Date(moment(to).format("YYYY-MM-DDT00:00"));
     calenderEvents.success = 0;
-
     var evnts = databaseManager.getEventModel();
-    evnts.find({ startDate: { $gt: frm, $lt: to } }).sort({ startDate: -1 }).exec(function(err, results) {
 
-        results.forEach(function(evnt) {
-
-            calenderEvents.result.push({
-                id: evnt._id.toString(),
-                title: evnt.subject,
-                url: '/detay/' + evnt._id,
-                class: "event-important",
-                start: new Date(evnt.startDate.getTime() + evnt.startTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000,
-                end: new Date(evnt.startDate.getTime() + evnt.endTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000
+    //mongodb tarihleri UTC olarak sakladığı için.
+    frm = new Date(frm.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
+    evnts.find({ endDate: { $gte: frm } })
+        .sort({ startDate: -1 })
+        .exec(function(err, results) {
+            results.forEach(function(evnt) {
+                var timezoneOffset = -1 * new Date().getTimezoneOffset();
+                calenderEvents.result.push({
+                    id: evnt._id.toString(),
+                    title: evnt.subject,
+                    url: '/detay/' + evnt._id,
+                    class: "event-important",
+                    // start: new Date(evnt.startDate.getTime() + evnt.startTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000,
+                    // end: new Date(evnt.startDate.getTime() + evnt.endTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000
+                    start: evnt.startDate.getTime(),
+                    end: evnt.endDate.getTime()
+                });
             });
-        });
 
-        calenderEvents.success = 1;
-        res.send(calenderEvents);
-    });
+            calenderEvents.success = 1;
+            res.send(calenderEvents);
+        });
 }
 
 function getEvents(req, res) {
@@ -146,8 +145,7 @@ function saveEvent(req, res) {
     newEvent.subject = req.body.eventSubject;
     newEvent.description = req.body.eventDescription;
     newEvent.startDate = new Date(req.body.startDate);
-    newEvent.startTime = req.body.startTime;
-    newEvent.endTime = req.body.endTime;
+    newEvent.endDate = new Date(req.body.endDate);
     newEvent.personCount = req.body.guestCount;
     newEvent.startLocation = req.body.startLocation;
     newEvent.endLocation = req.body.endLocation;

@@ -30,28 +30,25 @@ process.on('SIGINT', function() {
 });
 
 
-var schema = mongoose.Schema;
-
-var userSchema = new schema({
-    _id: schema.Types.ObjectId,
+var userSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     username: { type: String, lowercase: true, trim: true },
     password: String,
     active: { type: Boolean, default: true },
     createdDate: { type: Date, default: Date.now() }
 });
 
-var boatSchema = new schema({
+var boatSchema = new mongoose.Schema({
     name: String,
     createdDate: { type: Date, default: Date.now() }
 });
 
-var eventSchema = new schema({
-    boatId: schema.Types.ObjectId,
+var eventSchema = new mongoose.Schema({
+    boatId: mongoose.Schema.Types.ObjectId,
     subject: String,
     description: String,
     startDate: Date,
-    startTime: Number,
-    endTime: Number,
+    endDate: Date,
     personCount: Number,
     startLocation: String,
     endLocation: String,
@@ -64,10 +61,10 @@ var eventSchema = new schema({
     moneyType3: String
 });
 
-var trackerSchema = new schema({
+var trackerSchema = new mongoose.Schema({
     ip: String,
     url: String,
-    params: { type: schema.Types.Mixed, default: {} },
+    params: { type: mongoose.Schema.Types.Mixed, default: {} },
     body: {},
     query: {},
     statusCode: String,
@@ -81,7 +78,7 @@ function getUserModel() {
 }
 
 function getEventModel() {
-    return mongoose.model('events', eventSchema);
+    return mongoose.model('eventsTest', eventSchema);
 }
 
 function getBoatModel() {

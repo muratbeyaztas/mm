@@ -14,12 +14,12 @@ form.eventContainer(data-id="#{model._id}")
         input( name="subject" id="subject" type="text", placeholder="Konu", aria-describedby="subject", value="#{ model.subject }").form-control
     br
     .input-group
-        span.input-group-addon#startDate Tarih
-        input( name="startDateTime" id="startDateTime"  type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDateTime }").form-control
+        span.input-group-addon#startDateSpan Başlangıç Tarihi
+        input( name="startDate" id="startDate"  type="text", placeholder="Başlangıç Zamanı", aria-describedby="startDate", value="#{ model.startDate }").form-control.startDate
     br
     .input-group
-        span.input-group-addon#startEndTime Saat
-        input( name="startTime" id="startTime"  type="text", placeholder="Saati", aria-describedby="startEndTime", value="#{ model.startTime } - #{ model.endTime }").form-control
+        span.input-group-addon#endDateSpan Bitiş Tarihi
+        input( name="endDate" id="endDate"  type="text", placeholder="Saati", aria-describedby="endDate", value="#{ model.endDate }").form-control.endDate
     br
     .input-group
         span.input-group-addon Kişi Sayısı
@@ -60,4 +60,37 @@ form.eventContainer(data-id="#{model._id}")
             a.btn.btn-danger.pull-left(href="/sil/#{model._id}")#eventSilBtn Sil
             //a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
             button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
-    
+
+    script.
+        var startDate = $(".startDate").val();
+        var endDate = $(".endDate").val();
+
+
+        $(".startDate").flatpickr({
+            time_24hr: true,
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            defaultDate: startDate,
+            minuteIncrement: 30,
+            locale: "tr",
+            static:true
+        });
+        $(".endDate").flatpickr({
+            time_24hr: true,
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            defaultDate: endDate,
+            minuteIncrement: 30,
+            locale: "tr",
+            static:true
+        });
+    style(type='text/css').
+       .startDate{
+               background-color: white !important;
+       }
+       .endDate{
+               background-color: white !important;
+       }
+       .flatpickr-wrapper{
+           width: 100%;
+       }
