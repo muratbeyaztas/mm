@@ -31,11 +31,16 @@ var eventJs = (function() {
         event.moneyType3 = $("#moneyType3").val();
         event.hasDinner = $("#hasDinner").val();
 
+        toastr.options = {
+            "positionClass": "toast-top-center",
+            "timeOut": "1000"
+        };
+
         $.ajax({
             url: '/update',
             method: 'post',
             data: event,
-            success: function(response) {
+            success: function(response) {                
                 toastr.success("Event başarıyla güncellendi.", "BAŞARILI!");
                 shuldRefreshPage();
             },
@@ -46,7 +51,7 @@ var eventJs = (function() {
 
         });
 
-        console.log(event);
+        //console.log(event);
     }
 
 
@@ -73,3 +78,5 @@ var eventJs = (function() {
         init: init
     }
 })();
+
+

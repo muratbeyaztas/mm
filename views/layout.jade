@@ -32,16 +32,16 @@ html
       .container
         .navbar-header(style='width:100%')
           a(href="#").navbar-brand Eren Yatçılık
-          button.btn.btn-default.pull-right#logout(style='margin-top: 7px;') Çıkış
+          a(href="/giris" style='margin-top: 7px;').btn.btn-default.pull-right#logout Çıkış
 
     .container
       div
         ul(role="tablist").nav.nav-pills.nav-justified
           li(role="presentation").active
             a(href="#calendarYatch", aria-controls="profile", role="tab", data-toggle="tab") Takvim
-
-          li(role="presentation")
-            a(href="#register", aria-controls="register", role="tab", data-toggle="tab") Kayıt
+          if user.authorisation == true
+            li(role="presentation")
+              a(href="#register", aria-controls="register", role="tab", data-toggle="tab") Kayıt
 
         .tab-content
           div(role="tabpanel").tab-pane.active#calendarYatch

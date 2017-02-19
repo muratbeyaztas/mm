@@ -2,6 +2,7 @@
 
 form.eventContainer(data-id="#{model._id}")
     .input-group
+        span.input-group-addon Tekne
         select#selectedBoat.form-control
             for boat in boats
                 if boat._id.toString() == model.boatId.toString()
@@ -54,10 +55,10 @@ form.eventContainer(data-id="#{model._id}")
         span.input-group-addon#hasMeail Yemekli mi?
         input( name="hasDinner" id="hasDinner" type="text", placeholder="Yemekli mi?", aria-describedby="hasMeail", value="#{ model.hasDinner ? 'evet' : 'hayır' }").form-control
 
-    .modal-footer
+    .modal-footer(style="padding: 30px 0 10px")
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
         if user.authorisation == true
-            a.btn.btn-danger.pull-left(href="/sil/#{model._id}")#eventSilBtn Sil
+            a.btn.btn-danger.pull-left(href="/sil/#{model._id}" style="margin-left:0; width: 60px; margin-right: 10px;")#eventSilBtn Sil
             //a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
             button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
     

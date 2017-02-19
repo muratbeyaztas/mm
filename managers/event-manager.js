@@ -130,7 +130,7 @@ function getEvents(req, res) {
     boats.find({}, function(err, boats) {
 
         viewmodel.boats = boats;
-        return res.render(layoutPageName, { model: viewmodel /*, user: req.authenticated.user*/ });
+        return res.render(layoutPageName, { model: viewmodel , user: req.authenticated.user });
     });
 }
 
