@@ -1,5 +1,6 @@
 var express = require('express'),
-    databaseManager = require('./database-manager');
+    databaseManager = require('./database-manager'),
+    session = require("client-sessions");
 
 var router = express.Router(),
     app = express();
@@ -15,6 +16,7 @@ function loginViewModel(error) {
 //models end
 
 router.get('/', login);
+router.get("/logout", logout);
 
 function login(req, res) {
 
@@ -61,6 +63,12 @@ function authenticate(req, res, next) {
         req.authenticated.user = result;
         next();
     });
+}
+
+function logout(req, res, next) {
+
+    req.authenticated.reset();
+    res.redirect("/login");
 }
 
 module.exports = { router: router, authenticate: authenticate };
