@@ -78,7 +78,7 @@ function getUserModel() {
 }
 
 function getEventModel() {
-    return mongoose.model('eventsTest', eventSchema);
+    return mongoose.model('events', eventSchema);
 }
 
 function getBoatModel() {

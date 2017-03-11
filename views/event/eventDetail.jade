@@ -2,6 +2,12 @@
 
 form.eventContainer(data-id="#{model._id}")
     .input-group
+        button(type="button", data-dismiss="modal").btn.btn-default Kapat
+        if user.authorisation == true
+            a.btn.btn-danger.pull-left(href="/sil/#{model._id}" style="margin-left:0; width: 60px; margin-right: 10px;")#eventSilBtn Sil
+            button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
+    <br />
+    .input-group
         span.input-group-addon Tekne
         select#selectedBoat.form-control
             for boat in boats
@@ -59,7 +65,6 @@ form.eventContainer(data-id="#{model._id}")
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
         if user.authorisation == true
             a.btn.btn-danger.pull-left(href="/sil/#{model._id}" style="margin-left:0; width: 60px; margin-right: 10px;")#eventSilBtn Sil
-            //a.btn.btn-primary.pull-left(href="/event/update/#{model._id}")#eventUpdate Güncelle
             button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
 
     script.
