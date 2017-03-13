@@ -1,0 +1,84 @@
+
+doctype
+html
+	head
+		title #{title}
+		meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+		meta(charset="utf-8")
+		meta(name="generator", content="Bootply")
+		meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+		link(rel='stylesheet', href='/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/css/bootstrap-datepicker3.standalone.min.css')
+		link(rel='stylesheet', href='/lib/bootstrap-calendar/css/calendar.css')
+		link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css')
+		link(rel="stylesheet", href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css")
+		link(rel="stylesheet", href="/css/screen.css")
+	body
+		.container(style='margin:20px')
+			.row
+				.col-md-12
+					.panel.panel-primary
+						.panel-heading Kullanıcı Listesi
+						.panel-body.addUserBlock
+							.row.blockElement
+								.col-md-5
+									input(type='text', placeholder='Kullanıcı adı',name="username").form-control.username
+								.col-md-5
+									input(type='password', placeholder='Şifre',name="password").form-control.password
+								.col-md-2
+									button(type="submit").btn.btn-success.addUser Ekle
+			.row
+				.col-md-12
+					if model.resultCode !== 0
+						p #{model.message}
+					else
+						.panel.panel-info
+							.panel-heading Sistemde kayıtlı teknelerin listesi
+							.panel-body
+								.h2
+									small(style="color:red") 
+								table(style='background-color:white;').table.table-bordered.table-hover
+									thead
+										tr
+											th Id
+											th Kullanıcı Adı
+											th Kayıt Tarihi
+											th #
+											th #
+									tbody
+										each user, i in model.data
+											tr(data-id='#{user.userid}')
+												td #{user.userid}
+												td #{user.username}
+												td #{user.createdDate}
+												td
+													input(type="button", class="btn btn-primary", value="Detay", data-toggle="modal", data-target=".modal-user" ,data-user=JSON.stringify(user)).btn.btn-primarys
+												td
+													input(type="button",value="Sil").btn.btn-danger.deleteUser
+
+			div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade.modal-user
+				.modal-dialog(role="document")
+					.modal-header
+						button(type="button", data-dismiss="modal", aria-label="Close").close
+							span(aria-hidden="true") &times;
+						h4().modal-title Kullanıcı Güncelle
+					.modal-body
+						.form-group
+							label Kullanıcı ID
+							input(type="text", disabled="disabled", class="form-control").modal-userid
+						.form-group
+							label Kullanıcı Adı
+							input(type="text").form-control.modal-username
+						.form-group
+							label Yeni Şifre
+							input(type="password", placeholder="Yeni şifre").form-control.modal-password
+						input(type="button",value="Güncelle").btn.btn-success.model-update
+
+	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js")
+	script(src="/js/bootstrap.min.js")
+	script(src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js")
+	script(src="/js/jquery.blockUI.min.js")
+	script(src="/scripts/toastrJs.js")
+	script(src="/scripts/userJs.js")
+	script.
+		userJs.init();

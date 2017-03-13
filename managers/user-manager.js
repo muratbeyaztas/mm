@@ -1,13 +1,14 @@
 var express = require('express'),
     databaseManager = require('./database-manager'),
+    mongoose = require('mongoose'),
     session = require("client-sessions");
 
 var router = express.Router(),
     app = express();
 
 var userCollectionName = "users",
-    loginPageName = "./login.jade";
-
+    loginPageName = "./login.jade",
+    userPage = "./user/user.jade";
 
 //models begin
 function loginViewModel(error) {
@@ -15,8 +16,12 @@ function loginViewModel(error) {
 }
 //models end
 
-router.get('/', login);
+router.get('/giris', login);
 router.get("/logout", logout);
+router.get('/kullanici', getUserList)
+router.post('/kullanici/Ekle', addUser);
+router.post('/kullanici/guncelle', updateUser);
+router.post('/kullanici/sil', deleteUser);
 
 function login(req, res) {
 
@@ -42,8 +47,8 @@ function authenticate(req, res, next) {
         return next();
     }
     var viewmodel = new loginViewModel();
-    var username = req.body.username,
-        password = req.body.password;
+    var username = req.body.lgusername,
+        password = req.body.lgpassword;
 
     if (req.authenticated &&
         req.authenticated.user &&
@@ -63,6 +68,116 @@ function authenticate(req, res, next) {
         req.authenticated.user = result;
         next();
     });
+}
+
+function getUserList(req, res) {
+
+    var usermodel = databaseManager.getUserModel();
+    usermodel.find({}, {}, { sort: { _id: -1 } }, (err, users) => {
+
+        var response = {
+            data: [],
+            resultCode: 0,
+            message: 'OK'
+        };
+        if (err) {
+            response.resultCode = -1;
+            response.message = "Kullanıcı listesi database den alınamadı - " + err.message;
+        } else {
+            users.forEach(user => {
+                response.data.push({
+                    userid: user._id.toString(),
+                    username: user.username,
+                    createdDate: user.createdDate
+                });
+            });
+        }
+        res.render(userPage, { model: response });
+    });
+}
+
+function deleteUser(req, res) {
+
+    var userid = req.body.userid;
+    var usermodel = databaseManager.getUserModel();
+    var response = {
+        resultCode: 0,
+        message: 'OK'
+    };
+    usermodel.remove({ _id: new mongoose.Types.ObjectId(userid) }, function(err) {
+        if (err) {
+            response.resultCode = -1;
+            response.message = "Kullanıcı silinemedi. " + error.message;
+        }
+        res.json(response);
+    });
+}
+
+function updateUser(req, res) {
+
+    var user = {
+        userid: req.body.userid,
+        username: req.body.username,
+        password: req.body.password
+    };
+
+    var response = {
+        resultCode: 0,
+        message: "OK",
+        data: []
+    }
+
+    if (!user || !user.username || !user.password || !user.userid) {
+        response.resultCode = -1;
+        response.message = 'Kullanıcı adı, şifre ya da userID alanlarından biri ya da birkaçı boş';
+        res.json(response);
+    } else {
+
+        var usermodel = databaseManager.getUserModel();
+        usermodel.findById(user.userid, function(err, userdoc) {
+            userdoc.username = user.username;
+            userdoc.password = user.password;
+
+            userdoc.save(function(err, result) {
+                if (err) {
+                    response.resultCode = -2,
+                        response.message = JSON.stringify(err);
+                }
+                res.json(response);
+            });
+        });
+    }
+
+}
+
+function addUser(req, res) {
+
+    var userModel = databaseManager.getUserModel();
+    var newuser = new userModel();
+    newuser.username = req.body.username;
+    newuser.password = req.body.password;
+
+    var responseModel = {
+        message: 'Kullanıcı oluşturuldu.',
+        resultCode: 0
+    };
+
+    if (!newuser.username || !newuser.password) {
+        responseModel.message = "kullanıcı adı ya da şifre alanı boş bırakılamaz";
+        responseModel.resultCode = -1;
+    }
+    if (responseModel.resultCode === 0) {
+        newuser.save((err, result) => {
+
+            if (err) {
+                responseModel.message = err.message;
+                responseModel.resultCode = -2;
+            }
+            res.json(responseModel);
+        });
+    } else {
+        res.json(responseModel);
+    }
 }
 
 function logout(req, res, next) {

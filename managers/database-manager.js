@@ -31,7 +31,7 @@ process.on('SIGINT', function() {
 
 
 var userSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    // _id: mongoose.Schema.Types.ObjectId,
     username: { type: String, lowercase: true, trim: true },
     password: String,
     active: { type: Boolean, default: true },

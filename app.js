@@ -39,8 +39,8 @@ app.use(userManager.authenticate);
 
 
 app.use('/tekne', boatManagr);
-app.use('/giris', userManager.router);
-app.use(['/', '/etkinlik'], eventManager);
+app.use( '/etkinlik', eventManager);
+app.use('/', userManager.router);
 
 
 app.use(function(err, req, res, next) {
