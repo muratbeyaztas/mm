@@ -6,16 +6,24 @@ var userJs = (function($) {
 
     function bindEvents() {
         $(".addUser").off("click").on("click", addUser);
-        $(".modal-user").on('show.bs.modal', afterOpenModal);
+        $(".modal-user").on('show.bs.modal', afterUserOpenModal);
+        $(".modal-user-permissions").on('show.bs.modal', afterUserPermissionOpenModal);
         $(".model-update").off("click").on("click", updateUser);
         $(".deleteUser").off("click").on("click", deleteUser);
     }
 
-    function afterOpenModal(e) {
+    function afterUserOpenModal(e) {
         var user = JSON.parse($(e.relatedTarget).attr("data-user"));
         $(".modal-username").val(user.username);
         $(".modal-password").val(user.password);
         $(".modal-userid").val(user.userid);
+    }
+
+    function afterUserPermissionOpenModal(e) {
+        var user = JSON.parse($(e.relatedTarget).attr("data-user"));
+        // $(".userpermission-userid").html(user.userid);
+        $(".userpermission-username").html(user.username + " kullanıcısının yetkileri");
+        getUserPermission(user.userid);
     }
 
     function addUser() {
@@ -64,32 +72,30 @@ var userJs = (function($) {
         return user && user.userid && user.username && user.password;
     }
 
-    function deleteUser(){
+    function deleteUser() {
         var userid = $(this).parents("tr").attr("data-id");
-        if(!userid){
-            toastr.warning("KullınıcId boş","UYARI!");
+        if (!userid) {
+            toastr.warning("KullınıcId boş", "UYARI!");
             return;
         }
 
         $.ajax({
             url: '/Kullanici/Sil',
-            type:'post',
-            data: {userid: userid},
-            success:function(response){
-                if(!response){
-                    toastr.warning("Kullanıcı silinemedi.","UYARI!");    
-                }
-                else{
-                    if(response.resultCode === 0){
-                        toastr.success("Kullanıcı başarıyla silindi.","BAŞARILI");
+            type: 'post',
+            data: { userid: userid },
+            success: function(response) {
+                if (!response) {
+                    toastr.warning("Kullanıcı silinemedi.", "UYARI!");
+                } else {
+                    if (response.resultCode === 0) {
+                        toastr.success("Kullanıcı başarıyla silindi.", "BAŞARILI");
                         window.location.reload();
-                    }
-                    else{
-                        toastr.info(response.message,"BİLGİ!");
+                    } else {
+                        toastr.info(response.message, "BİLGİ!");
                     }
                 }
             },
-            error: function(){ toastr.error(JSON.stringify(arguments),"HATA!"); }
+            error: function() { toastr.error(JSON.stringify(arguments), "HATA!"); }
         })
     }
 
@@ -132,6 +138,30 @@ var userJs = (function($) {
                 $(".modal-user").unblock();
             }
         });
+    }
+
+    function getUserPermission(userid) {
+
+        if (userid) {
+
+            $(".modal-user-permissions").block({ message: '' });
+            var url = "".concat("/Kullanici/izinler/", userid);
+            $(".userPermissionBody").empty();
+
+            $.ajax({
+                url: url,
+                type: 'get',
+                success: function(response) {
+                    $(".userPermissionBody").append(response);
+                },
+                error: function() {
+                    toastr.error(JSON.stringify(arguments));
+                },
+                complete: function() {
+                    $(".modal-user-permissions").unblock();
+                }
+            });
+        }
     }
 
     return {

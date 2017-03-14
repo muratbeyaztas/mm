@@ -1,0 +1,16 @@
+
+if model.resultCode != 0
+    p #{model.message}
+else
+    table.table.table-striped.table-bordered
+        thead
+            tr
+                th #
+                th İzin Türü
+                th İzin ID
+        each permission in model.data
+            tr
+                td
+                    input(type="checkbox").form-control#chkPermission
+                td #{permission.name}
+                td #{permission._id}

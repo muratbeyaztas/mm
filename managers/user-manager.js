@@ -8,7 +8,8 @@ var router = express.Router(),
 
 var userCollectionName = "users",
     loginPageName = "./login.jade",
-    userPage = "./user/user.jade";
+    userPage = "./user/user.jade",
+    userPermissionPage = "./user/userPermission.jade";
 
 //models begin
 function loginViewModel(error) {
@@ -19,6 +20,7 @@ function loginViewModel(error) {
 router.get('/giris', login);
 router.get("/logout", logout);
 router.get('/kullanici', getUserList)
+router.get('/kullanici/izinler/:userid', getUserPermission);
 router.post('/kullanici/Ekle', addUser);
 router.post('/kullanici/guncelle', updateUser);
 router.post('/kullanici/sil', deleteUser);
@@ -177,6 +179,55 @@ function addUser(req, res) {
         });
     } else {
         res.json(responseModel);
+    }
+}
+
+function getUserPermission(req, res) {
+
+    var userid = req.params.userid;
+    var response = {
+        resultCode: 0,
+        message: "OK",
+        data: []
+    };
+
+    if (!userid) {
+        response.resultCode = -1;
+        response.message = "UserID bilgisi boş geldi";
+    } else {
+
+        var userpermissionModel = databaseManager.getUserPermissionModel();
+        userpermissionModel.find({ userId: new mongoose.Types.ObjectId(userid) }).exec(function(err, userpermissionDocs) {
+
+            if (err) {
+                response.resultCode = -2;
+                response.message = err.message;
+                return res.render(userPermissionPage, { model: response });
+            } else if (!userpermissionDocs || userpermissionDocs.length < 1) {
+                response.resultCode = -3;
+                response.message = "Tanımlı yetkiniz bulunmuyor.";
+                return res.render(userPermissionPage, { model: response });
+            } else {
+
+                var permissionsModel = databaseManager.getPermissionModel();
+                userpermissionDocs.forEach(function(userPermission, i) {
+
+                    permissionsModel.findOne({ _id: userPermission.permissionID }).exec(function(err, permissionDoc) {
+
+                        if (err) {
+                            response.resultCode = -4;
+                            repsonse.message = "Kullanıcıya tanımlı izin veritabanından alınamadı - " + err.message;
+                            return res.render(userPermissionPage, { model: response });
+                        } else {
+                            response.data.push(permissionDoc);
+                        }
+                        if (userpermissionDocs.length == i + 1) {
+                            return res.render(userPermissionPage, { model: response });
+                        }
+                    });
+                });
+            }
+        });
     }
 }
 
