@@ -15,93 +15,81 @@ html
 		link(rel="stylesheet", href="/css/screen.css")
 	body
 		.container(style='margin:20px')
-			div(style="background-color: white")
-				// Nav tabs
-				ul.nav.nav-tabs(role='tablist')
-					li.active(role='presentation')
-						a(href='#home', aria-controls='home', role='tab', data-toggle='tab') Kullanıcılar
-					li(role='presentation')
-						a(href='#profile', aria-controls='profile', role='tab', data-toggle='tab') Yetkiler
 
-				// Tab panes
-				div(style="margin-top:20px").tab-content
-					#home.tab-pane.active(role='tabpanel')
-						.row
-						.col-md-12
-							.panel.panel-primary
-								.panel-heading Kullanıcı Listesi
-								.panel-body.addUserBlock
-									.row.blockElement
-										.col-md-5
-											input(type='text', placeholder='Kullanıcı adı',name="username").form-control.username
-										.col-md-5
-											input(type='password', placeholder='Şifre',name="password").form-control.password
-										.col-md-2
-											button(type="submit").btn.btn-success.addUser Ekle
-						.row
-							.col-md-12
-								if model.resultCode !== 0
-									p #{model.message}
-								else
-									.panel.panel-info
-										.panel-heading Sistemde kayıtlı teknelerin listesi
-										.panel-body
-											.h2
-												small(style="color:red") 
-											table(style='background-color:white;').table.table-bordered.table-hover
-												thead
-													tr
-														th Id
-														th Kullanıcı Adı
-														th Kayıt Tarihi
-														th #
-														th #
-														th #
-												tbody
-													each user, i in model.data
-														tr(data-id='#{user.userid}')
-															td #{user.userid}
-															td #{user.username}
-															td #{user.createdDate}
-															td
-																input(type="button", class="btn btn-primary", value="Detay", data-toggle="modal", data-target=".modal-user" ,				data-user=JSON.stringify(user)).btn.btn-primarys
-															td
-																input(type="button",value="Sil").btn.btn-danger.deleteUser
-															td
-																input(type="button", value="Yetkiler", data-toggle="modal", data-target=".modal-user-permissions", data-user=JSON.stringify(user)).btn.btn-success
+			.row
+				.col-md-12
+					.panel.panel-primary
+						.panel-heading Kullanıcı Listesi
+						.panel-body.addUserBlock
+							.row.blockElement
+								.col-md-5
+									input(type='text', placeholder='Kullanıcı adı').form-control.username
+								.col-md-5
+									input(type='password', placeholder='Şifre').form-control.password
+								.col-md-2
+									button(type="submit").btn.btn-success.addUser Ekle
+			.row
+				.col-md-12
+					if model.resultCode !== 0
+						p #{model.message}
+					else
+						.panel.panel-info
+							.panel-heading Sistemde kayıtlı teknelerin listesi
+							.panel-body
+								.h2
+									small(style="color:red") 
+								table(style='background-color:white;').table.table-bordered.table-hover
+									thead
+										tr
+											th Id
+											th Kullanıcı Adı
+											th Kayıt Tarihi
+											th #
+											th #
+											th #
+									tbody
+										each user, i in model.data
+											tr(data-id='#{user.userid}')
+												td #{user.userid}
+												td #{user.username}
+												td #{user.createdDate}
+												td
+													input(type="button", class="btn btn-primary", value="Detay", data-toggle="modal", data-target=".modal-user" ,				data-user=JSON.stringify(user)).btn.btn-primarys
+												td
+													input(type="button",value="Sil").btn.btn-danger.deleteUser
+												td
+													input(type="button", value="Yetkiler", data-toggle="modal", data-target=".modal-user-permissions", data-user=JSON.stringify(user)).btn.btn-success
 
-					#profile.tab-pane(role='tabpanel') MURAT
+	div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade.modal-user
+		.modal-dialog(role="document")
+			.modal-header
+				button(type="button", data-dismiss="modal", aria-label="Close").close
+					span(aria-hidden="true") &times;
+				h4().modal-title Kullanıcı Güncelle
+			.modal-body
+				.form-group
+					label Kullanıcı ID
+					input(type="text", disabled="disabled", class="form-control").modal-userid
+				.form-group
+					label Kullanıcı Adı
+					input(type="text").form-control.modal-username
+				.form-group
+					label Yeni Şifre
+					input(type="password", placeholder="Yeni şifre").form-control.modal-password
+				input(type="button",value="Güncelle").btn.btn-success.model-update
 
+	div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade.modal-user-permissions
+		.modal-dialog(role="document")
+			.modal-header
+				button(type="button", data-dismiss="modal", aria-label="Close").close
+					span(aria-hidden="true") &times;
+				h4().modal-title
+					b 
+						span.userpermission-username
 
-		div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade.modal-user
-			.modal-dialog(role="document")
-				.modal-header
-					button(type="button", data-dismiss="modal", aria-label="Close").close
-						span(aria-hidden="true") &times;
-					h4().modal-title Kullanıcı Güncelle
-				.modal-body
-					.form-group
-						label Kullanıcı ID
-						input(type="text", disabled="disabled", class="form-control").modal-userid
-					.form-group
-						label Kullanıcı Adı
-						input(type="text").form-control.modal-username
-					.form-group
-						label Yeni Şifre
-						input(type="password", placeholder="Yeni şifre").form-control.modal-password
-					input(type="button",value="Güncelle").btn.btn-success.model-update
-
-		div(tabindex="-1", role="dialog", aria-labelledby="myModalLabel").modal.fade.modal-user-permissions
-			.modal-dialog(role="document")
-				.modal-header
-					button(type="button", data-dismiss="modal", aria-label="Close").close
-						span(aria-hidden="true") &times;
-					h4().modal-title
-						b 
-							span.userpermission-username
-							
-				.modal-body.userPermissionBody
-					
+			.modal-body
+				.userPermissionBody
+				input(type="button", value="Güncelle").btn.btn-success.update-user-permission
 
 
 

@@ -2,15 +2,20 @@
 if model.resultCode != 0
     p #{model.message}
 else
+    input(type="hidden").hd-userid
     table.table.table-striped.table-bordered
         thead
             tr
                 th #
                 th İzin Türü
                 th İzin ID
-        each permission in model.data
+        each permission, i in model.data
             tr
                 td
-                    input(type="checkbox").form-control#chkPermission
-                td #{permission.name}
-                td #{permission._id}
+                    if permission.ischeck
+                        input(type="checkbox", checked="checked", id="chkPermission#{i}", value="#{permission.permissionid}").form-control
+                    else
+                        input(type="checkbox", id="chkPermission#{i}", value="#{permission.permissionid}").form-control
+                td 
+                    label(for="chkPermission" + i) #{permission.permissionname}
+                td #{permission.permissionid}

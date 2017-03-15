@@ -24,6 +24,7 @@ router.get('/kullanici/izinler/:userid', getUserPermission);
 router.post('/kullanici/Ekle', addUser);
 router.post('/kullanici/guncelle', updateUser);
 router.post('/kullanici/sil', deleteUser);
+router.post('/kullanici/updatepermissions', updateUserPermissions);
 
 function login(req, res) {
 
@@ -40,7 +41,9 @@ function login(req, res) {
             break;
     }
 
-    return res.render(loginPageName, { model: viewmodel });
+    return res.render(loginPageName, {
+        model: viewmodel
+    });
 }
 
 function authenticate(req, res, next) {
@@ -62,7 +65,10 @@ function authenticate(req, res, next) {
     }
 
     var users = databaseManager.getUserModel();
-    users.findOne({ username: username.toLowerCase(), password: password }, function(err, result) {
+    users.findOne({
+        username: username.toLowerCase(),
+        password: password
+    }, function(err, result) {
 
         if (!result) {
             return res.redirect('/giris?mc=0x1');
@@ -72,10 +78,59 @@ function authenticate(req, res, next) {
     });
 }
 
+function updateUserPermissions(req, res) {
+
+    var response = {
+        resultCode: 0,
+        message: 'OK',
+        data: []
+    };
+    var userid = req.body.userid;
+    var permissions = req.body.permissionIds;
+
+    if (!userid) {
+        response.resultCode = -2;
+        response.message = "KullanıcıID boş geldi";
+        return res.json(response);
+    }
+
+    var userpermissionmodel = databaseManager.getUserPermissionModel();
+    userpermissionmodel.remove({ userId: mongoose.Types.ObjectId(userid) }, function(err, doc) {
+
+        if (err) {
+            response.resultCode = -1;
+            response.message = "Kullanıcı yetkileri güncellenemedi - (CNT-DLT)";
+            return res.json(response);
+        }
+
+        if (!permissions || permissions.length < 1) {
+            return res.json(response);
+        }
+
+        var counter = 0;
+        for (var i = 0; i < permissions.length; i++) {
+            var newuserpermission = new userpermissionmodel();
+            newuserpermission.byUser = mongoose.Types.ObjectId(req.authenticated.user._id);
+            newuserpermission.userId = userid;
+            newuserpermission.createdDate = Date.now();
+            newuserpermission.permissionID = permissions[i];
+            newuserpermission.save(function(err) {
+                if (permissions.length == ++counter) {
+                    res.json(response);
+                }
+            });
+        }
+    });
+}
+
 function getUserList(req, res) {
 
     var usermodel = databaseManager.getUserModel();
-    usermodel.find({}, {}, { sort: { _id: -1 } }, (err, users) => {
+    usermodel.find({}, {}, {
+        sort: {
+            _id: -1
+        }
+    }, (err, users) => {
 
         var response = {
             data: [],
@@ -94,7 +149,9 @@ function getUserList(req, res) {
                 });
             });
         }
-        res.render(userPage, { model: response });
+        res.render(userPage, {
+            model: response
+        });
     });
 }
 
@@ -106,12 +163,18 @@ function deleteUser(req, res) {
         resultCode: 0,
         message: 'OK'
     };
-    usermodel.remove({ _id: new mongoose.Types.ObjectId(userid) }, function(err) {
+    usermodel.remove({
+        _id: new mongoose.Types.ObjectId(userid)
+    }, function(err) {
         if (err) {
             response.resultCode = -1;
             response.message = "Kullanıcı silinemedi. " + error.message;
         }
-        res.json(response);
+
+        var userpermissionmodel = databaseManager.getUserPermissionModel();
+        userpermissionmodel.remove({ userId: mongoose.Types.ObjectId(userid) }, function() {
+            res.json(response);
+        });
     });
 }
 
@@ -190,41 +253,53 @@ function getUserPermission(req, res) {
         message: "OK",
         data: []
     };
+    var userpermssios;
 
     if (!userid) {
         response.resultCode = -1;
         response.message = "UserID bilgisi boş geldi";
     } else {
 
-        var userpermissionModel = databaseManager.getUserPermissionModel();
-        userpermissionModel.find({ userId: new mongoose.Types.ObjectId(userid) }).exec(function(err, userpermissionDocs) {
+        var permissionsModel = databaseManager.getPermissionModel();
+        permissionsModel.find({}).exec(function(err, permissionDocs) {
 
             if (err) {
-                response.resultCode = -2;
-                response.message = err.message;
-                return res.render(userPermissionPage, { model: response });
-            } else if (!userpermissionDocs || userpermissionDocs.length < 1) {
-                response.resultCode = -3;
-                response.message = "Tanımlı yetkiniz bulunmuyor.";
+                response.resultCode = -4;
+                response.message = "Kullanıcıya tanımlı izin veritabanından alınamadı - " + err.message;
                 return res.render(userPermissionPage, { model: response });
             } else {
 
-                var permissionsModel = databaseManager.getPermissionModel();
-                userpermissionDocs.forEach(function(userPermission, i) {
+                var userpermissionmodel = databaseManager.getUserPermissionModel();
+                userpermissionmodel.find({ userId: new mongoose.Types.ObjectId(userid) }).exec(function(err, userpermissionDocs) {
 
-                    permissionsModel.findOne({ _id: userPermission.permissionID }).exec(function(err, permissionDoc) {
+                    if (err) {
+                        response.resultCode = -2;
+                        response.message = err.message;
+                        return res.render(userPermissionPage, { model: response });
+                    }
 
-                        if (err) {
-                            response.resultCode = -4;
-                            repsonse.message = "Kullanıcıya tanımlı izin veritabanından alınamadı - " + err.message;
-                            return res.render(userPermissionPage, { model: response });
-                        } else {
-                            response.data.push(permissionDoc);
+                    for (var a = 0; a < permissionDocs.length; a++) {
+
+                        var permission = permissionDocs[a];
+                        var responseDataRow = {
+                            permissionid: permission._id,
+                            permissionname: permission.name,
+                            createdDate: '',
+                            ischeck: false
+                        };
+
+                        for (var i = 0; i < userpermissionDocs.length; i++) {
+
+                            var userpermission = userpermissionDocs[i];
+                            if (userpermission.permissionID.toString() == permission._id.toString()) {
+                                responseDataRow.ischeck = true;
+                                responseDataRow.createdDate = userpermission.createdDate;
+                                break;
+                            }
                         }
-                        if (userpermissionDocs.length == i + 1) {
-                            return res.render(userPermissionPage, { model: response });
-                        }
-                    });
+                        response.data.push(responseDataRow);
+                    }
+                    res.render(userPermissionPage, { model: response });
                 });
             }
         });
@@ -237,4 +312,7 @@ function logout(req, res, next) {
     res.redirect("/login");
 }
 
-module.exports = { router: router, authenticate: authenticate };
+module.exports = {
+    router: router,
+    authenticate: authenticate
+};

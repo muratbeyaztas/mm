@@ -10,6 +10,7 @@ var userJs = (function($) {
         $(".modal-user-permissions").on('show.bs.modal', afterUserPermissionOpenModal);
         $(".model-update").off("click").on("click", updateUser);
         $(".deleteUser").off("click").on("click", deleteUser);
+        $(".update-user-permission").off("click").on("click", updateUserPermission);
     }
 
     function afterUserOpenModal(e) {
@@ -24,6 +25,45 @@ var userJs = (function($) {
         // $(".userpermission-userid").html(user.userid);
         $(".userpermission-username").html(user.username + " kullanıcısının yetkileri");
         getUserPermission(user.userid);
+    }
+
+    function updateUserPermission() {
+
+        var userpermission = {
+            userid: $(".hd-userid").val(),
+            permissionIds: []
+        }
+        var checkedBoxes = $("input[type=checkbox]:checked");
+        for (var i = 0; i < checkedBoxes.length; i++) {
+            var id = $(checkedBoxes[i]).val();
+            userpermission.permissionIds.push(id);
+        }
+
+        $(".modal-user-permissions").block({message:''});
+        $.ajax({
+            url: '/Kullanici/UpdatePermissions',
+            type: 'post',
+            data: JSON.stringify(userpermission),
+            contentType: 'application/json',
+            success: function(response){
+                if(!response){
+                    toastr.warning("Kullanıcı yetkileri güncellenemedi.","UYARI!");
+                }
+                else{
+                    if(response.resultCode === 0){
+                        toastr.success("Kullanıcı yetkileri güncellendi.","BAŞARILI!");
+                        $(".modal-user-permissions").modal('hide');
+                    }
+                    else{
+                        toastr.info(response.message, "BİLGİ!");
+                    }
+                }
+            },
+            error: function(){ toastr.error(JSON.stringify(arguments)); },
+            complete: function(){
+                $(".modal-user-permissions").unblock();
+            }
+        });
     }
 
     function addUser() {
@@ -153,6 +193,7 @@ var userJs = (function($) {
                 type: 'get',
                 success: function(response) {
                     $(".userPermissionBody").append(response);
+                    $(".hd-userid").val(userid);
                 },
                 error: function() {
                     toastr.error(JSON.stringify(arguments));
