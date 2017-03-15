@@ -1,7 +1,8 @@
 var express = require('express'),
     databaseManager = require('./database-manager'),
     mongoose = require('mongoose'),
-    session = require("client-sessions");
+    session = require("client-sessions"),
+    permissionManager = require("./permission-manager");
 
 var router = express.Router(),
     app = express();
@@ -73,6 +74,7 @@ function authenticate(req, res, next) {
         if (!result) {
             return res.redirect('/giris?mc=0x1');
         }
+
         req.authenticated.user = result;
         next();
     });
@@ -95,7 +97,9 @@ function updateUserPermissions(req, res) {
     }
 
     var userpermissionmodel = databaseManager.getUserPermissionModel();
-    userpermissionmodel.remove({ userId: mongoose.Types.ObjectId(userid) }, function(err, doc) {
+    userpermissionmodel.remove({
+        userId: mongoose.Types.ObjectId(userid)
+    }, function(err, doc) {
 
         if (err) {
             response.resultCode = -1;
@@ -123,36 +127,71 @@ function updateUserPermissions(req, res) {
     });
 }
 
+function hasRight(userperdocs, right) {
+
+    for (var i = 0; i < userperdocs.length; i++) {
+        if (userperdocs[i].permissionID.toString() === right._id.toString()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function getUserList(req, res) {
 
-    var usermodel = databaseManager.getUserModel();
-    usermodel.find({}, {}, {
-        sort: {
-            _id: -1
-        }
-    }, (err, users) => {
+    var response = {
+        data: [],
+        resultCode: 0,
+        message: 'OK'
+    };
 
-        var response = {
-            data: [],
-            resultCode: 0,
-            message: 'OK'
-        };
-        if (err) {
-            response.resultCode = -1;
-            response.message = "Kullanıcı listesi database den alınamadı - " + err.message;
-        } else {
-            users.forEach(user => {
-                response.data.push({
-                    userid: user._id.toString(),
-                    username: user.username,
-                    createdDate: user.createdDate
-                });
-            });
+
+    checkUserHasPermission('admin', req.authenticated.user, function(hasPer) {
+
+        if (!hasPer) {
+            response.resultCode = -2;
+            response.message = "Yetkisiz kullanıcı";
+            return res.render(userPage, { model: response });
         }
-        res.render(userPage, {
-            model: response
+
+        var usermodel = databaseManager.getUserModel();
+        usermodel.find({}, {}, { sort: { _id: -1 } }, function(err, users) {
+
+            if (err) {
+                response.resultCode = -1;
+                response.message = "Kullanıcı listesi database den alınamadı - " + err.message;
+            } else {
+                users.forEach(user => {
+                    response.data.push({
+                        userid: user._id.toString(),
+                        username: user.username,
+                        createdDate: user.createdDate
+                    });
+                });
+            }
+            res.render(userPage, {
+                model: response
+            });
         });
     });
+
+}
+
+function checkUserHasPermission(permissionname, user, callback) {
+    var currentUser = user;
+    if (!currentUser) {
+        callback(false);
+        return;
+    }
+
+    var hasPermission = false;
+    permissionManager.getByUserId(currentUser._id.toString(), function(err, userperdocs) {
+        permissionManager.getByPermissionName('admin', function(err, adminperdoc) {
+            var isTrue = hasRight(userperdocs, adminperdoc);
+            callback(isTrue);
+        });
+    });
+
 }
 
 function deleteUser(req, res) {
@@ -172,7 +211,9 @@ function deleteUser(req, res) {
         }
 
         var userpermissionmodel = databaseManager.getUserPermissionModel();
-        userpermissionmodel.remove({ userId: mongoose.Types.ObjectId(userid) }, function() {
+        userpermissionmodel.remove({
+            userId: mongoose.Types.ObjectId(userid)
+        }, function() {
             res.json(response);
         });
     });
@@ -266,16 +307,22 @@ function getUserPermission(req, res) {
             if (err) {
                 response.resultCode = -4;
                 response.message = "Kullanıcıya tanımlı izin veritabanından alınamadı - " + err.message;
-                return res.render(userPermissionPage, { model: response });
+                return res.render(userPermissionPage, {
+                    model: response
+                });
             } else {
 
                 var userpermissionmodel = databaseManager.getUserPermissionModel();
-                userpermissionmodel.find({ userId: new mongoose.Types.ObjectId(userid) }).exec(function(err, userpermissionDocs) {
+                userpermissionmodel.find({
+                    userId: new mongoose.Types.ObjectId(userid)
+                }).exec(function(err, userpermissionDocs) {
 
                     if (err) {
                         response.resultCode = -2;
                         response.message = err.message;
-                        return res.render(userPermissionPage, { model: response });
+                        return res.render(userPermissionPage, {
+                            model: response
+                        });
                     }
 
                     for (var a = 0; a < permissionDocs.length; a++) {
@@ -299,7 +346,9 @@ function getUserPermission(req, res) {
                         }
                         response.data.push(responseDataRow);
                     }
-                    res.render(userPermissionPage, { model: response });
+                    res.render(userPermissionPage, {
+                        model: response
+                    });
                 });
             }
         });

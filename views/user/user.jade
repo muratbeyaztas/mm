@@ -18,16 +18,17 @@ html
 
 			.row
 				.col-md-12
-					.panel.panel-primary
-						.panel-heading Kullanıcı Listesi
-						.panel-body.addUserBlock
-							.row.blockElement
-								.col-md-5
-									input(type='text', placeholder='Kullanıcı adı').form-control.username
-								.col-md-5
-									input(type='password', placeholder='Şifre').form-control.password
-								.col-md-2
-									button(type="submit").btn.btn-success.addUser Ekle
+					if model.resultCode !== -2
+						.panel.panel-primary
+							.panel-heading Kullanıcı Listesi
+							.panel-body.addUserBlock
+								.row.blockElement
+									.col-md-5
+										input(type='text', placeholder='Kullanıcı adı').form-control.username
+									.col-md-5
+										input(type='password', placeholder='Şifre').form-control.password
+									.col-md-2
+										button(type="submit").btn.btn-success.addUser Ekle
 			.row
 				.col-md-12
 					if model.resultCode !== 0
