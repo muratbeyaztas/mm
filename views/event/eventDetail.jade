@@ -3,7 +3,7 @@
 form.eventContainer(data-id="#{model._id}")
     .input-group
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
-        if user.authorisation == true
+        if user.isAdmin == true
             a.btn.btn-danger.pull-left(href="/sil/#{model._id}" style="margin-left:0; width: 60px; margin-right: 10px;")#eventSilBtn Sil
             button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
     <br />
@@ -41,13 +41,13 @@ form.eventContainer(data-id="#{model._id}")
         input( name="fee" id="fee" type="text", placeholder="Ödeme", aria-describedby="payment", value="#{ model.fee }").form-control
         input( name="moneyType1" id="moneyType1" type="text", placeholder="", aria-describedby="moneyType1", value="#{ model.moneyType1 }").form-control    
     br
-    if user.authorisation == true
+    if user.isAdmin == true
      .input-group.money-type
          span.input-group-addon Satış
          input( name="sell" id="sell" type="text", placeholder="Satış", aria-describedby="sell", value="#{ model.sell }").form-control
          input( name="moneyType2" id="moneyType2" type="text", placeholder="", aria-describedby="moneyType2", value="#{ model.moneyType2 }").form-control   
      br
-    if user.authorisation == true
+    if user.isAdmin == true
      .input-group.money-type
          span.input-group-addon Kapora
          input( name="earnestMoney" id="earnestMoney" type="text", placeholder="Kapora", aria-describedby="earnestMoney", value="#{ model.earnestMoney }").form-control
@@ -63,7 +63,7 @@ form.eventContainer(data-id="#{model._id}")
 
     .modal-footer(style="padding: 30px 0 10px")
         button(type="button", data-dismiss="modal").btn.btn-default Kapat
-        if user.authorisation == true
+        if user.isAdmin == true
             a.btn.btn-danger.pull-left(href="/sil/#{model._id}" style="margin-left:0; width: 60px; margin-right: 10px;")#eventSilBtn Sil
             button(type="button", data-id="#{model._id}").btn.btn-primary.pull-left#eventUpdate Güncelle
 

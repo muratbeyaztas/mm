@@ -87,6 +87,7 @@ function getEventDetail(req, res) {
     });
 };
 
+
 function getEventsByRange(req, res) {
 
     var calenderEvents = new getEventsViewModel();
@@ -95,6 +96,22 @@ function getEventsByRange(req, res) {
 
     frm = new Date(moment(frm).format("YYYY-MM-DDT00:00"));
     to = new Date(moment(to).format("YYYY-MM-DDT00:00"));
+
+    var hasPermission = false;
+    for (var i = 0; i < req.authenticated.user.permissions.length; i++) {
+        var per = req.authenticated.user.permissions[i];
+        if (per.name === "admin") {
+            hasPermission = true;
+            break;
+        }
+    }
+
+    if (!hasPermission) {
+        if(frm < Date.now()){
+            frm = new Date(moment(Date.now()).format("YYYY-MM-DD HH:mm"));
+        }
+    }
+
     calenderEvents.success = 0;
     var evnts = databaseManager.getEventModel();
 
@@ -108,7 +125,7 @@ function getEventsByRange(req, res) {
                 calenderEvents.result.push({
                     id: evnt._id.toString(),
                     title: evnt.subject,
-                    url: '/detay/' + evnt._id,
+                    url: '/etkinlik/detay/' + evnt._id,
                     class: "event-important",
                     // start: new Date(evnt.startDate.getTime() + evnt.startTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000,
                     // end: new Date(evnt.startDate.getTime() + evnt.endTime * 60 * 60 * 1000).getTime() - 180 * 60 * 1000
@@ -129,7 +146,7 @@ function getEvents(req, res) {
     boats.find({}, function(err, boats) {
 
         viewmodel.boats = boats;
-        return res.render(layoutPageName, { model: viewmodel , user: req.authenticated.user });
+        return res.render(layoutPageName, { model: viewmodel, user: req.authenticated.user });
     });
 }
 
@@ -157,7 +174,7 @@ function saveEvent(req, res) {
     newEvent.moneyType3 = req.body.moneyType3;
     newEvent.hasDinner = req.body.hasMeal === 'on';
     newEvent.save(function(err, evnt) {
-        res.redirect("/");
+        res.redirect("/etkinlik");
     });
 }
 

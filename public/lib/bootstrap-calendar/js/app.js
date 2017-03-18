@@ -3,7 +3,7 @@
     "use strict";
 
     var options = {
-        events_source: '/eventler',
+        events_source: '/etkinlik/eventler',
         view: 'month',
         tmpl_path: 'lib/bootstrap-calendar/tmpls/',
         tmpl_cache: false,

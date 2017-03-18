@@ -26,6 +26,7 @@ router.post('/kullanici/Ekle', addUser);
 router.post('/kullanici/guncelle', updateUser);
 router.post('/kullanici/sil', deleteUser);
 router.post('/kullanici/updatepermissions', updateUserPermissions);
+router.all('/', function(req,res){ res.redirect('/etkinlik'); })
 
 function login(req, res) {
 
@@ -65,18 +66,48 @@ function authenticate(req, res, next) {
         return res.redirect('/giris');
     }
 
-    var users = databaseManager.getUserModel();
-    users.findOne({
+    var userModel = databaseManager.getUserModel();
+    userModel.findOne({
         username: username.toLowerCase(),
         password: password
-    }, function(err, result) {
+    }, function(err, user) {
 
-        if (!result) {
+        if (!user) {
             return res.redirect('/giris?mc=0x1');
         }
 
-        req.authenticated.user = result;
-        next();
+        user.permissions = [];
+        var userperModel = databaseManager.getUserPermissionModel();
+        userperModel.find({ userId: user._id }).exec(function(err, userpers){
+
+            if(err){
+                return res.redirect("/giris?mc=0x1");
+            }
+
+            var perModel = databaseManager.getPermissionModel();
+            for(var i = 0; i < userpers.length; i++){
+                userper = userpers[i];
+                perModel.findOne({ _id: userper.permissionID }).exec(function(err,per){
+
+                    if(err){
+                        return;
+                    }
+                    user.permissions.push(per);
+                    if(user.permissions.length === userpers.length){
+                        var authenticateduser = {
+                            _id: user._id,
+                            username: user.username,
+                            password: user.password,
+                            permissions: []
+                        };
+                        authenticateduser.permissions = user.permissions;
+                        authenticateduser.isAdmin = user.permissions.map(function(per){ return per.name }).indexOf('admin') > -1;
+                        req.authenticated.user = authenticateduser;
+                        next();
+                    }
+                });
+            }
+        });
     });
 }
 

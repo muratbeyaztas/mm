@@ -21,7 +21,7 @@ html
       .container
         .navbar-header(style='width:100%')
           a(href="#").navbar-brand Eren Yatçılık
-          a(href="/giris/logout" style='margin-top: 7px;').btn.btn-default.pull-right#logout Çıkış
+          a(href="/logout" style='margin-top: 7px;').btn.btn-default.pull-right#logout Çıkış
 
     .container
       div
@@ -47,7 +47,7 @@ html
               h3
             #calendar
           div(role="tabpanel").tab-pane#register
-            form(method="post", action="kaydet", role="form", data-toggle="validator").form-horizontal
+            form(method="post", action="/etkinlik/kaydet", role="form", data-toggle="validator").form-horizontal
               .form-group
                 label.col-sm-2.control-label Tekne
                 .col-sm-10
