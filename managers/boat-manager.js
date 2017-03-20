@@ -25,9 +25,21 @@ function boatViewModel(id, name, createdDate) {
     this.createdDate = createdDate;
 }
 
+function hasPermission(req, res){
+    var user = req.authenticated.user;
+    if(!user.permissions){
+        return false;
+    }
+    var hasper = user.permissions.map(function(per){ return per.name }).indexOf('admin') > -1;
+    return hasper;
+}
+
 function getBoats(req, res) {
 
     var viewmodel = new boatViewModel();
+    if(!hasPermission(req)){
+        return res.render(indexpage, { model: {} , resultCode: -1, message:'Yetkisiz kullanıcı'});
+    }
 
     databaseManager
         .getBoatModel()
@@ -36,13 +48,17 @@ function getBoats(req, res) {
         .exec((err, boats) => {
             viewmodel.error = "";
             viewmodel.boats = boats;
-            res.render(indexpage, { model: viewmodel });
+            res.render(indexpage, { model: viewmodel, resultCode: 1, message:'ok' });
         });
 }
 
 function test() {}
 
 function deleteBoat(req, res) {
+
+    if(!hasPermission(req)){
+        return res.render(indexpage, { model: {} , resultCode: -1, message:'Yetkisiz kullanıcı'});
+    }
 
     var viewmodel = new boatViewModel();
     var boatId = req.params.boatId;
@@ -55,6 +71,10 @@ function deleteBoat(req, res) {
 }
 
 function addBoat(req, res) {
+
+    if(!hasPermission(req)){
+        return res.render(indexpage, { model: {} , resultCode: -1, message:'Yetkisiz kullanıcı'});
+    }
 
     var viewmodel = new boatViewModel();
 
