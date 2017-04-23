@@ -26,7 +26,7 @@ router.post('/kullanici/Ekle', addUser);
 router.post('/kullanici/guncelle', updateUser);
 router.post('/kullanici/sil', deleteUser);
 router.post('/kullanici/updatepermissions', updateUserPermissions);
-router.all('/', function(req,res){ res.redirect('/etkinlik'); })
+router.all('/', function (req, res) { res.redirect('/etkinlik'); })
 
 function login(req, res) {
 
@@ -70,7 +70,7 @@ function authenticate(req, res, next) {
     userModel.findOne({
         username: username.toLowerCase(),
         password: password
-    }, function(err, user) {
+    }, function (err, user) {
 
         if (!user) {
             return res.redirect('/giris?mc=0x1');
@@ -78,34 +78,48 @@ function authenticate(req, res, next) {
 
         user.permissions = [];
         var userperModel = databaseManager.getUserPermissionModel();
-        userperModel.find({ userId: user._id }).exec(function(err, userpers){
+        userperModel.find({ userId: user._id }).exec(function (err, userpers) {
 
-            if(err){
+            if (err) {
                 return res.redirect("/giris?mc=0x1");
             }
 
             var perModel = databaseManager.getPermissionModel();
-            for(var i = 0; i < userpers.length; i++){
-                userper = userpers[i];
-                perModel.findOne({ _id: userper.permissionID }).exec(function(err,per){
+            if (!userpers.length) {
+                var authenticateduser = {
+                    _id: user._id,
+                    username: user.username,
+                    password: user.password,
+                    permissions: []
+                };
+                authenticateduser.permissions = user.permissions;
+                authenticateduser.isAdmin = user.permissions.map(function (per) { return per.name }).indexOf('admin') > -1;
+                req.authenticated.user = authenticateduser;
+                next();
+            }
+            else {
+                for (var i = 0; i < userpers.length; i++) {
+                    userper = userpers[i];
+                    perModel.findOne({ _id: userper.permissionID }).exec(function (err, per) {
 
-                    if(err){
-                        return;
-                    }
-                    user.permissions.push(per);
-                    if(user.permissions.length === userpers.length){
-                        var authenticateduser = {
-                            _id: user._id,
-                            username: user.username,
-                            password: user.password,
-                            permissions: []
-                        };
-                        authenticateduser.permissions = user.permissions;
-                        authenticateduser.isAdmin = user.permissions.map(function(per){ return per.name }).indexOf('admin') > -1;
-                        req.authenticated.user = authenticateduser;
-                        next();
-                    }
-                });
+                        if (err) {
+                            return;
+                        }
+                        user.permissions.push(per);
+                        if (user.permissions.length === userpers.length) {
+                            var authenticateduser = {
+                                _id: user._id,
+                                username: user.username,
+                                password: user.password,
+                                permissions: []
+                            };
+                            authenticateduser.permissions = user.permissions;
+                            authenticateduser.isAdmin = user.permissions.map(function (per) { return per.name }).indexOf('admin') > -1;
+                            req.authenticated.user = authenticateduser;
+                            next();
+                        }
+                    });
+                }
             }
         });
     });
@@ -130,7 +144,7 @@ function updateUserPermissions(req, res) {
     var userpermissionmodel = databaseManager.getUserPermissionModel();
     userpermissionmodel.remove({
         userId: mongoose.Types.ObjectId(userid)
-    }, function(err, doc) {
+    }, function (err, doc) {
 
         if (err) {
             response.resultCode = -1;
@@ -149,7 +163,7 @@ function updateUserPermissions(req, res) {
             newuserpermission.userId = userid;
             newuserpermission.createdDate = Date.now();
             newuserpermission.permissionID = permissions[i];
-            newuserpermission.save(function(err) {
+            newuserpermission.save(function (err) {
                 if (permissions.length == ++counter) {
                     res.json(response);
                 }
@@ -177,7 +191,7 @@ function getUserList(req, res) {
     };
 
 
-    checkUserHasPermission('admin', req.authenticated.user, function(hasPer) {
+    checkUserHasPermission('admin', req.authenticated.user, function (hasPer) {
 
         if (!hasPer) {
             response.resultCode = -2;
@@ -186,7 +200,7 @@ function getUserList(req, res) {
         }
 
         var usermodel = databaseManager.getUserModel();
-        usermodel.find({}, {}, { sort: { _id: -1 } }, function(err, users) {
+        usermodel.find({}, {}, { sort: { _id: -1 } }, function (err, users) {
 
             if (err) {
                 response.resultCode = -1;
@@ -216,8 +230,8 @@ function checkUserHasPermission(permissionname, user, callback) {
     }
 
     var hasPermission = false;
-    permissionManager.getByUserId(currentUser._id.toString(), function(err, userperdocs) {
-        permissionManager.getByPermissionName('admin', function(err, adminperdoc) {
+    permissionManager.getByUserId(currentUser._id.toString(), function (err, userperdocs) {
+        permissionManager.getByPermissionName('admin', function (err, adminperdoc) {
             var isTrue = hasRight(userperdocs, adminperdoc);
             callback(isTrue);
         });
@@ -235,7 +249,7 @@ function deleteUser(req, res) {
     };
     usermodel.remove({
         _id: new mongoose.Types.ObjectId(userid)
-    }, function(err) {
+    }, function (err) {
         if (err) {
             response.resultCode = -1;
             response.message = "Kullanıcı silinemedi. " + error.message;
@@ -244,7 +258,7 @@ function deleteUser(req, res) {
         var userpermissionmodel = databaseManager.getUserPermissionModel();
         userpermissionmodel.remove({
             userId: mongoose.Types.ObjectId(userid)
-        }, function() {
+        }, function () {
             res.json(response);
         });
     });
@@ -271,11 +285,11 @@ function updateUser(req, res) {
     } else {
 
         var usermodel = databaseManager.getUserModel();
-        usermodel.findById(user.userid, function(err, userdoc) {
+        usermodel.findById(user.userid, function (err, userdoc) {
             userdoc.username = user.username;
             userdoc.password = user.password;
 
-            userdoc.save(function(err, result) {
+            userdoc.save(function (err, result) {
                 if (err) {
                     response.resultCode = -2,
                         response.message = JSON.stringify(err);
@@ -333,7 +347,7 @@ function getUserPermission(req, res) {
     } else {
 
         var permissionsModel = databaseManager.getPermissionModel();
-        permissionsModel.find({}).exec(function(err, permissionDocs) {
+        permissionsModel.find({}).exec(function (err, permissionDocs) {
 
             if (err) {
                 response.resultCode = -4;
@@ -346,7 +360,7 @@ function getUserPermission(req, res) {
                 var userpermissionmodel = databaseManager.getUserPermissionModel();
                 userpermissionmodel.find({
                     userId: new mongoose.Types.ObjectId(userid)
-                }).exec(function(err, userpermissionDocs) {
+                }).exec(function (err, userpermissionDocs) {
 
                     if (err) {
                         response.resultCode = -2;
