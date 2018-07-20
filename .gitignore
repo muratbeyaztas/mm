@@ -3,7 +3,7 @@
 .vscode
 
 # sass cache folder
--sass-cache
+.sass-cache
 
 
 # Dependency directory
