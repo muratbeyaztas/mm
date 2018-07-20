@@ -1,9 +1,10 @@
-# Dependency directory
-# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
-/node_modules
 
 # vs code folder
-.vscode
+# .vscode
 
 # sass cache folder
--sass-cache
+# -sass-cache
+
+
+# Dependency directory
+node_modules
